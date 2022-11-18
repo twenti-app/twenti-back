@@ -33,7 +33,7 @@ export const app = functions.https.onRequest(async (request, response) => {
     }
     if (request.path === "/v0/preview-registration") {
         await previewRegistrationController.previewRegistration(request, ipAddress).then((res) => {
-            response.status(res.statusCode).send(res);
+            response.status(res?.statusCode ?? 400).send(res);
             return;
         });
     }
