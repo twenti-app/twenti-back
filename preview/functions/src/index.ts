@@ -12,10 +12,11 @@ server.use(bodyParser.urlencoded({extended: false, limit: "50mb"}));
 server.use(bodyParser.json({limit: "50mb"}));
 server.set("trust proxy", true);
 
-initFirebaseModule("twenti-preview");
+initFirebaseModule();
 
 const previewRegistrationController = new PreviewRegistrationController();
 
+const availableRoutes = ['/v0/preview-registration'];
 export const app = functions.https.onRequest(async (request, response) => {
     const cors = await import("cors");
     const corsHandler = cors({origin: true});
@@ -23,7 +24,7 @@ export const app = functions.https.onRequest(async (request, response) => {
     });
     if (request.method === "OPTIONS") return;
     const ipAddress = request.headers["x-forwarded-for"] || request.connection.remoteAddress;
-    if (!request.path) {
+    if (!request.path && !availableRoutes.includes(request.path)) {
         response.status(404).json({
             status: "Failure Request",
             statusCode: 404,
