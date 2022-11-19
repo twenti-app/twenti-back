@@ -3,6 +3,7 @@ import * as express from "express";
 import {initFirebaseModule} from "./config/FirebaseConfig";
 import * as bodyParser from "body-parser";
 import {PreviewRegistrationController} from "./adapters/in/controllers/Preview-registration-controller";
+import * as cors from "cors";
 
 const server = express();
 
@@ -18,12 +19,10 @@ const previewRegistrationController = new PreviewRegistrationController();
 
 const availableRoutes = ['/v0/preview-registration'];
 export const app = functions.https.onRequest(async (request, response) => {
-    const cors = await import("cors");
     const corsHandler = cors({origin: true});
     corsHandler(request, response, async () => {
-
         if (request.method === "OPTIONS") return;
-        // const ipAddress = request.headers["x-forwarded-for"] || request.connection.remoteAddress;
+        const ipAddress = request.headers["x-forwarded-for"] || request.connection.remoteAddress;
         if (!request.path && !availableRoutes.includes(request.path)) {
             response.status(404).json({
                 status: "Failure Request",
@@ -33,7 +32,7 @@ export const app = functions.https.onRequest(async (request, response) => {
             return;
         }
         if (request.path === "/v0/preview-registration") {
-            await previewRegistrationController.previewRegistration(request, '').then((res) => {
+            await previewRegistrationController.previewRegistration(request, ipAddress).then((res) => {
                 response.status(res?.statusCode ?? 400).send(res);
                 return;
             });
