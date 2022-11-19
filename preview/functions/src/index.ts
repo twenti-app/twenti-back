@@ -20,22 +20,23 @@ const availableRoutes = ['/v0/preview-registration'];
 export const app = functions.https.onRequest(async (request, response) => {
     const cors = await import("cors");
     const corsHandler = cors({origin: true});
-    corsHandler(request, response, () => {
-    });
-    if (request.method === "OPTIONS") return;
-    const ipAddress = request.headers["x-forwarded-for"] || request.connection.remoteAddress;
-    if (!request.path && !availableRoutes.includes(request.path)) {
-        response.status(404).json({
-            status: "Failure Request",
-            statusCode: 404,
-            message: "Not Found",
-        });
-        return;
-    }
-    if (request.path === "/v0/preview-registration") {
-        await previewRegistrationController.previewRegistration(request, ipAddress).then((res) => {
-            response.status(res?.statusCode ?? 400).send(res);
+    corsHandler(request, response, async () => {
+
+        if (request.method === "OPTIONS") return;
+        // const ipAddress = request.headers["x-forwarded-for"] || request.connection.remoteAddress;
+        if (!request.path && !availableRoutes.includes(request.path)) {
+            response.status(404).json({
+                status: "Failure Request",
+                statusCode: 404,
+                message: "Not Found",
+            });
             return;
-        });
-    }
+        }
+        if (request.path === "/v0/preview-registration") {
+            await previewRegistrationController.previewRegistration(request, '').then((res) => {
+                response.status(res?.statusCode ?? 400).send(res);
+                return;
+            });
+        }
+    });
 });

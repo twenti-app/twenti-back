@@ -19,7 +19,7 @@ export class PreviewRegistrationController extends DefaultController {
 
     public async previewRegistration(request: Request, ip: string | string[] | undefined): Promise<any> {
         this.defaultErrData();
-        const userEmail: string = request.query.email as string;
+        const userEmail: string = request.body?.email;
         if (!userEmail) {
             this.setErrData({statusCode: 400, message: "Email is required"});
             return this.err;
