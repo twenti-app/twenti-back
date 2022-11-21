@@ -1,3 +1,4 @@
-export interface PreviewRegistrationInputDto{
+export interface PreviewRegistrationInputDto {
     email: string;
+    reason: string;
 }
