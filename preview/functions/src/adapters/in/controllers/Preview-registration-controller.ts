@@ -5,6 +5,7 @@ import {DefaultController} from "../../../shared/DefaultController";
 import {FindUserByEmailService,} from "../../../application/services/Find-user-by-email-service";
 import {emailVerified} from "../../../shared/EmailVerified";
 import {Request} from "firebase-functions/v1/https";
+import {transporter} from "../../../config/EmailConfig";
 
 export class PreviewRegistrationController extends DefaultController {
     private previewRegistrationRegistration: PreviewRegistrationService;
@@ -47,9 +48,27 @@ export class PreviewRegistrationController extends DefaultController {
                 };
                 return this.previewRegistrationRegistration
                     .previewRegistration(model).then((response) => {
+                        this.sendEmail(userEmail);
                         this.setErrData(response, response.statusCode === 200 ? "Success Request" : undefined);
                         return this.err;
                     });
             });
+    }
+
+    private sendEmail(email: string) {
+        const mailOptions = {
+            from: `softauthor1@gmail.com`,
+            to: email,
+            subject: 'contact form message',
+            html: `<h1>Order Confirmation</h1>
+                    <p> <b>Email: </b>$email} </p>`
+        };
+
+        return transporter.sendMail(mailOptions, (error) => {
+            if (error) {
+                return error;
+            }
+            return false;
+        });
     }
 }

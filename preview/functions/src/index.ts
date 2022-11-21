@@ -17,7 +17,7 @@ initFirebaseModule();
 
 const previewRegistrationController = new PreviewRegistrationController();
 
-const availableRoutes = ['/v0/preview-registration'];
+const availableRoutes = ["/v0/preview-registration"];
 export const app = functions.https.onRequest(async (request, response) => {
     const corsHandler = cors({origin: true});
     corsHandler(request, response, async () => {
@@ -31,7 +31,7 @@ export const app = functions.https.onRequest(async (request, response) => {
             });
             return;
         }
-        if (request.path === "/v0/preview-registration") {
+        if (request.path === "/v0/preview-registration" && request.method === 'POST') {
             await previewRegistrationController.previewRegistration(request, ipAddress).then((res) => {
                 response.status(res?.statusCode ?? 400).send(res);
                 return;
