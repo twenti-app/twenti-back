@@ -4,7 +4,7 @@ import * as serviceAccount from '../../../keys/development/development-twenti-fi
 
 import {credential} from "firebase-admin";
 
-export function initFirebase() {
+export function firebaseConfig() {
     initializeApp({
         credential: credential.cert(serviceAccount as any)
     })

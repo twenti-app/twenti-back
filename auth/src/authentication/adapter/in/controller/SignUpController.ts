@@ -19,7 +19,7 @@ export class SignUpController extends DefaultController {
         return this.router.post("/", async (req, res) => {
             this.defaultErrData();
             const signupInputDto: SignUpInputDto = req.body
-            // TODO: Check invitation
+            // TODO: Check if is valid
             const signUpModel: SignUpModel = {
                 emailVerified: false,
                 disbled: false,
