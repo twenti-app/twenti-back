@@ -5,7 +5,7 @@ export const swaggerConfig = {
     "swagger": "2.0",
     "info": {
         "version": "1.0.0",
-        "title": "Twenti auth swaggerConfig",
+        "title": "Twenti auth swagger",
         "description": "Swagger for twenti auth microservice",
         "license": {
             "name": "MIT",
