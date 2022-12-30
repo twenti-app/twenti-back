@@ -53,7 +53,7 @@ export class PreviewRegistrationController extends DefaultController {
                 };
                 return this.previewRegistrationRegistration
                     .previewRegistration(model).then((response) => {
-                        sendEmail(previewRegistrationInputDto.email, 'Prueba correo', 'PreviewEmail.html');
+                        sendEmail(previewRegistrationInputDto.email, `You're on the waitlist`, 'PreviewEmail.html');
                         this.setErrData(response, response.statusCode === 200 ? "Success Request" : undefined);
                         return this.err;
                     });
