@@ -1,5 +1,5 @@
 import {toDefinition} from "../../shared/stringUtils/ToDefinition";
-import {logInInputDto, logInOutputDto, signUpInputDto, signUpOutputDto} from "./DefaultValues";
+import {generateQrOutputDto, logInInputDto, logInOutputDto, signUpInputDto, signUpOutputDto} from "./DefaultValues";
 
 export const swaggerConfig = {
     "swagger": "2.0",
@@ -93,6 +93,39 @@ export const swaggerConfig = {
                 }
             }
         },
+        "/generate/{uid}": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Generate QR",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "path",
+                        "description": "Uid",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/GenerateQrOutputDTO"
+                        }
+                    }
+                }
+            }
+        }
     },
     "definitions": {
         "signupInputDTO": {
@@ -110,6 +143,10 @@ export const swaggerConfig = {
         "logInOutputDTO": {
             "type": "object",
             "properties": toDefinition(logInOutputDto)
+        },
+        "GenerateQrOutputDTO": {
+            "type": "object",
+            "properties": toDefinition(generateQrOutputDto)
         }
     },
     "components": {

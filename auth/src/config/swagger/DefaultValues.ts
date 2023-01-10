@@ -5,6 +5,7 @@ import {ProviderData} from "../../authentication/adapter/out/entities/ProviderDa
 import {LogInInputDto} from "../../authentication/adapter/in/dto/LogInInputDto";
 import {LogInOutputDto} from "../../authentication/adapter/out/LogInOutputDto";
 import {TokenManager} from "../../authentication/adapter/out/entities/TokenManager";
+import {GenerateQrOutputDto} from "../../authentication/adapter/out/GenerateQrOutputDto";
 
 export const signUpInputDto: SignUpInputDto = {
     email: '',
@@ -60,4 +61,10 @@ export const logInOutputDto: LogInOutputDto = {
     isAnonymous: false,
     lastLoginAt: new Date(),
     stsTokenManager: defaultStsTokenManager
+}
+
+export const generateQrOutputDto: GenerateQrOutputDto = {
+    base: '',
+    data: '',
+    extension: ''
 }
