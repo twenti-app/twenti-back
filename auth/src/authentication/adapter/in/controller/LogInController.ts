@@ -4,7 +4,7 @@ import {LogInInputDto} from "../dto/LogInInputDto";
 import {LogInModel} from "../../../domain/LogInModel";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
 import {CODE_BAD_REQUEST, CODE_OK, CODE_UNAUTHORIZED} from "../../../../shared/enums/Errors";
-import {LogInOutputDto} from "../../out/LogInOutputDto";
+import {LogInOutputDto} from "../../out/dto/LogInOutputDto";
 
 export class LogInController extends DefaultController {
     private loginService: LoginService;

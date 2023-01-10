@@ -4,12 +4,17 @@ import * as QRCode from 'qrcode';
 import {CODE_BAD_REQUEST, CODE_OK} from "../../../../shared/enums/Errors";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
 import {isOwner} from "../../../../shared/middleware/IsOwner";
-import {GenerateQrOutputDto} from "../../out/GenerateQrOutputDto";
+import {GenerateQrOutputDto} from "../../out/dto/GenerateQrOutputDto";
+import {SaveGenerateQrService} from "../../../application/service/SaveGenerateQr-service";
+import {GenerateQrSimpleModel} from "../../../domain/GenerateQrSimpleModel";
 
 export class GenerateQrController extends DefaultController {
 
+    private saveGenerateQrService: SaveGenerateQrService;
+
     constructor() {
         super();
+        this.saveGenerateQrService = new SaveGenerateQrService();
     }
 
     public generateQr() {
@@ -21,8 +26,13 @@ export class GenerateQrController extends DefaultController {
                     const error = {err: {statusCode: CODE_BAD_REQUEST, message: err}};
                     this.setErrData(error);
                 }
-                // secret: secret.base32;
                 const resp = this.err.statusCode === CODE_OK ? this.getOutputDto(dataUrl) : ErrResponseService(this.err);
+                const savedData: GenerateQrSimpleModel = {
+                    ...this.getOutputDto(dataUrl),
+                    userUid: req.params.uid,
+                    secret: secret.base32,
+                }
+                this.saveGenerateQrService.saveGenerateQr(savedData)
                 return res.status(this.err.statusCode).send(resp);
             });
         });

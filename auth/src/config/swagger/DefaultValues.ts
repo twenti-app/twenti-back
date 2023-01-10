@@ -1,11 +1,11 @@
 import {SignUpInputDto} from "../../authentication/adapter/in/dto/SignUpInputDto";
-import {SignUpOutputDto} from "../../authentication/adapter/out/SignUpOutputDto";
-import {Metadata} from "../../authentication/adapter/out/entities/Metadata";
-import {ProviderData} from "../../authentication/adapter/out/entities/ProviderData";
+import {SignUpOutputDto} from "../../authentication/adapter/out/dto/SignUpOutputDto";
+import {Metadata} from "../../authentication/adapter/out/dto/entities/Metadata";
+import {ProviderData} from "../../authentication/adapter/out/dto/entities/ProviderData";
 import {LogInInputDto} from "../../authentication/adapter/in/dto/LogInInputDto";
-import {LogInOutputDto} from "../../authentication/adapter/out/LogInOutputDto";
-import {TokenManager} from "../../authentication/adapter/out/entities/TokenManager";
-import {GenerateQrOutputDto} from "../../authentication/adapter/out/GenerateQrOutputDto";
+import {LogInOutputDto} from "../../authentication/adapter/out/dto/LogInOutputDto";
+import {TokenManager} from "../../authentication/adapter/out/dto/entities/TokenManager";
+import {GenerateQrOutputDto} from "../../authentication/adapter/out/dto/GenerateQrOutputDto";
 
 export const signUpInputDto: SignUpInputDto = {
     email: '',

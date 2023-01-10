@@ -4,7 +4,7 @@ import {SignUpService} from "../../../application/service/SignUpService";
 import {SignUpModel} from "../../../domain/SignUpModel";
 import {CODE_OK} from "../../../../shared/enums/Errors";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
-import {SignUpOutputDto} from "../../out/SignUpOutputDto";
+import {SignUpOutputDto} from "../../out/dto/SignUpOutputDto";
 
 
 export class SignUpController extends DefaultController {
