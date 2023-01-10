@@ -7,19 +7,28 @@ import {isOwner} from "../../../../shared/middleware/IsOwner";
 import {GenerateQrOutputDto} from "../../out/dto/GenerateQrOutputDto";
 import {SaveGenerateQrService} from "../../../application/service/SaveGenerateQr-service";
 import {GenerateQrSimpleModel} from "../../../domain/GenerateQrSimpleModel";
+import {FindByUserUidGenerateQrService} from "../../../application/service/FindByUserUidGenerateQr-service";
 
 export class GenerateQrController extends DefaultController {
 
     private saveGenerateQrService: SaveGenerateQrService;
+    private findByUserUidGenerateQr: FindByUserUidGenerateQrService
 
     constructor() {
         super();
         this.saveGenerateQrService = new SaveGenerateQrService();
+        this.findByUserUidGenerateQr = new FindByUserUidGenerateQrService();
     }
 
     public generateQr() {
         return this.router.get("/:uid", isOwner, async (req, res) => {
             this.defaultErrData();
+            const savedData: any = await this.findByUserUidGenerateQr.findByUserUid(req.params.uid);
+            if (savedData) {
+                if (savedData.err) this.setErrData(savedData.err);
+                const savedResp = this.err.statusCode === CODE_OK ? this.getSavedDataDto(savedData) : ErrResponseService(this.err);
+                return res.status(this.err.statusCode).send(savedResp);
+            }
             const secret = speakeasy.generateSecret({name: 'twneti'});
             QRCode.toDataURL(secret.otpauth_url, (err, dataUrl) => {
                 if (err || !dataUrl) {
@@ -45,6 +54,14 @@ export class GenerateQrController extends DefaultController {
             extension: info[0].split("/")[1],
             base: info[1],
             data: values[1]
+        }
+    }
+
+    private getSavedDataDto(value): GenerateQrOutputDto {
+        return {
+            extension: value.extension,
+            base: value.base,
+            data: value.data,
         }
     }
 }
