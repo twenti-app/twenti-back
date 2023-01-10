@@ -1,5 +1,5 @@
 import {toDefinition} from "../../shared/stringUtils/ToDefinition";
-import {signUpInputDto, signUpOutputDto} from "./DefaultValues";
+import {logInInputDto, logInOutputDto, signUpInputDto, signUpOutputDto} from "./DefaultValues";
 
 export const swaggerConfig = {
     "swagger": "2.0",
@@ -61,16 +61,55 @@ export const swaggerConfig = {
                     }
                 }
             }
-        }
+        },
+        "/logIn": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "LogIn with firebase",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "LogIn body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#definitions/logInInputDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/logInOutputDTO"
+                        }
+                    }
+                }
+            }
+        },
     },
     "definitions": {
         "signupInputDTO": {
             "type": "object",
             "properties": toDefinition(signUpInputDto)
         },
+        "logInInputDto": {
+            "type": "object",
+            "properties": toDefinition(logInInputDto)
+        },
         "signupOutputDTO": {
             "type": "object",
             "properties": toDefinition(signUpOutputDto)
+        },
+        "logInOutputDTO": {
+            "type": "object",
+            "properties": toDefinition(logInOutputDto)
         }
     },
     "components": {

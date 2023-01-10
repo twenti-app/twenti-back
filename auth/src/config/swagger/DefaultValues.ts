@@ -2,12 +2,20 @@ import {SignUpInputDto} from "../../authentication/adapter/in/dto/SignUpInputDto
 import {SignUpOutputDto} from "../../authentication/adapter/out/SignUpOutputDto";
 import {Metadata} from "../../authentication/adapter/out/entities/Metadata";
 import {ProviderData} from "../../authentication/adapter/out/entities/ProviderData";
+import {LogInInputDto} from "../../authentication/adapter/in/dto/LogInInputDto";
+import {LogInOutputDto} from "../../authentication/adapter/out/LogInOutputDto";
+import {TokenManager} from "../../authentication/adapter/out/entities/TokenManager";
 
 export const signUpInputDto: SignUpInputDto = {
     email: '',
     invitation: '',
     password: '',
     phoneNumber: ''
+}
+
+export const logInInputDto: LogInInputDto = {
+    email: '',
+    password: ''
 }
 
 const defaultMetadata: Metadata = {
@@ -24,6 +32,11 @@ const providerData: ProviderData = {
     photoURL: ''
 }
 
+const defaultStsTokenManager: TokenManager = {
+    accessToken: '',
+    refreshToken: '',
+    expirationTime: new Date()
+}
 export const signUpOutputDto: SignUpOutputDto = {
     email: '',
     phoneNumber: '',
@@ -33,4 +46,18 @@ export const signUpOutputDto: SignUpOutputDto = {
     tokensValidAfterTime: new Date(),
     metadata: defaultMetadata,
     providerData: [providerData],
+}
+
+export const logInOutputDto: LogInOutputDto = {
+    uid: '',
+    phoneNumber: '',
+    displayName: '',
+    photoURL: '',
+    email: '',
+    emailVerified: false,
+    createdAt: new Date(),
+    providerData: providerData,
+    isAnonymous: false,
+    lastLoginAt: new Date(),
+    stsTokenManager: defaultStsTokenManager
 }
