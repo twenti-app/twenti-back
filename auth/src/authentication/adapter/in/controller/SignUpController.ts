@@ -5,14 +5,17 @@ import {SignUpModel} from "../../../domain/SignUpModel";
 import {CODE_OK} from "../../../../shared/enums/Errors";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
 import {SignUpOutputDto} from "../../out/dto/SignUpOutputDto";
+import {CreateUserService} from "../../../../user/application/service/CreateUser-service";
 
 
 export class SignUpController extends DefaultController {
     private signUpService: SignUpService;
+    private createUserService: CreateUserService;
 
     constructor() {
         super();
         this.signUpService = new SignUpService();
+        this.createUserService = new CreateUserService();
     }
 
     public signup(): any {
@@ -31,6 +34,10 @@ export class SignUpController extends DefaultController {
 
             if (data.err) this.setErrData(data.err);
             const resp = this.err.statusCode === CODE_OK ? this.getOutputDto(data) : ErrResponseService(this.err);
+            if (this.err.statusCode === CODE_OK) await this.createUserService.createUser({
+                uid: data.uid,
+                email: data.email
+            })
             return res.status(this.err.statusCode).send(resp);
         })
     }

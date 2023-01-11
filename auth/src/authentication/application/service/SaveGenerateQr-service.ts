@@ -5,8 +5,8 @@ import {CODE_INTERNAL_SERVER_ERROR} from "../../../shared/enums/Errors";
 
 export class SaveGenerateQrService implements SaveGenerateQrPort {
     saveGenerateQr(data: GenerateQrSimpleModel) {
-        const saveData = new GenerateQrModel(data);
-        return saveData.save()
+        const savedData = new GenerateQrModel(data);
+        return savedData.save()
             .then(r => {
                 return r;
             }).catch((error) => {
