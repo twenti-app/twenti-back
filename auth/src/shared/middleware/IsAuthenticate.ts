@@ -1,4 +1,4 @@
-import {CODE_INTERNAL_SERVER_ERROR, CODE_UNAUTHORIZED} from "../enums/Errors";
+import {CODE_FORBIDDEN, CODE_INTERNAL_SERVER_ERROR, CODE_UNAUTHORIZED} from "../enums/Errors";
 import {ErrResponseService} from "../errors/ErrorService";
 import {getAuth} from "firebase-admin/auth";
 
@@ -8,10 +8,10 @@ export function authenticate(req, res, next) {
     if (!bearer) {
         const resp = ErrResponseService({
             status: 'Failure Request',
-            statusCode: CODE_UNAUTHORIZED,
+            statusCode: CODE_FORBIDDEN,
             message: 'Unauthorized request'
         });
-        return res.status(CODE_UNAUTHORIZED).send(resp);
+        return res.status(CODE_FORBIDDEN).send(resp);
     }
     const token = bearer.includes('bearer') ? bearer.split(' ')[1] : bearer;
     getAuth()

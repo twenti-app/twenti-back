@@ -3,7 +3,7 @@ import {LoginService} from "../../../application/service/Login-service";
 import {LogInInputDto} from "../dto/LogInInputDto";
 import {LogInModel} from "../../../domain/LogInModel";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
-import {CODE_BAD_REQUEST, CODE_OK, CODE_UNAUTHORIZED} from "../../../../shared/enums/Errors";
+import {CODE_BAD_REQUEST, CODE_OK} from "../../../../shared/enums/Errors";
 import {LogInOutputDto} from "../../out/dto/LogInOutputDto";
 
 export class LogInController extends DefaultController {
@@ -24,7 +24,7 @@ export class LogInController extends DefaultController {
                     statusCode: CODE_BAD_REQUEST,
                     message: 'Email and Password are required'
                 });
-                return res.status(CODE_UNAUTHORIZED).send(resp);
+                return res.status(CODE_BAD_REQUEST).send(resp);
             }
             const user: LogInModel = {
                 email: logInInputDto.email,

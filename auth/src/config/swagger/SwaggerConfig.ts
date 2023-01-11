@@ -1,5 +1,12 @@
 import {toDefinition} from "../../shared/stringUtils/ToDefinition";
-import {generateQrOutputDto, logInInputDto, logInOutputDto, signUpInputDto, signUpOutputDto} from "./DefaultValues";
+import {
+    checkTokenInputDto,
+    generateQrOutputDto,
+    logInInputDto,
+    logInOutputDto,
+    signUpInputDto,
+    signUpOutputDto
+} from "./DefaultValues";
 
 export const swaggerConfig = {
     "swagger": "2.0",
@@ -125,6 +132,37 @@ export const swaggerConfig = {
                     }
                 }
             }
+        },
+        "/validateToken": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Validate Token",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Validate token body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#definitions/checkTokenInputDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/logInOutputDTO"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -147,6 +185,10 @@ export const swaggerConfig = {
         "GenerateQrOutputDTO": {
             "type": "object",
             "properties": toDefinition(generateQrOutputDto)
+        },
+        "checkTokenInputDto": {
+            "type": "object",
+            "properties": toDefinition(checkTokenInputDto)
         }
     },
     "components": {

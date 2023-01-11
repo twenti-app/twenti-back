@@ -1,7 +1,7 @@
 import {DefaultController} from "../../../../shared/objectUtils/DefaultController";
 import * as speakeasy from 'speakeasy';
 import * as QRCode from 'qrcode';
-import {CODE_BAD_REQUEST, CODE_OK} from "../../../../shared/enums/Errors";
+import {CODE_BAD_REQUEST, CODE_NOT_FOUND, CODE_OK} from "../../../../shared/enums/Errors";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
 import {isOwner} from "../../../../shared/middleware/IsOwner";
 import {GenerateQrOutputDto} from "../../out/dto/GenerateQrOutputDto";
@@ -12,7 +12,7 @@ import {FindByUserUidGenerateQrService} from "../../../application/service/FindB
 export class GenerateQrController extends DefaultController {
 
     private saveGenerateQrService: SaveGenerateQrService;
-    private findByUserUidGenerateQr: FindByUserUidGenerateQrService
+    private findByUserUidGenerateQr: FindByUserUidGenerateQrService;
 
     constructor() {
         super();
@@ -24,12 +24,16 @@ export class GenerateQrController extends DefaultController {
         return this.router.get("/:uid", isOwner, async (req, res) => {
             this.defaultErrData();
             const savedData: any = await this.findByUserUidGenerateQr.findByUserUid(req.params.uid);
-            if (savedData) {
+            if (savedData && savedData?.err?.statusCode !== CODE_NOT_FOUND) {
                 if (savedData.err) this.setErrData(savedData.err);
                 const savedResp = this.err.statusCode === CODE_OK ? this.getSavedDataDto(savedData) : ErrResponseService(this.err);
                 return res.status(this.err.statusCode).send(savedResp);
             }
-            const secret = speakeasy.generateSecret({name: 'twneti'});
+            const secret = speakeasy.generateSecret({
+                length: 20,
+                name: `Twenti (${req.params.uid})`,
+                issuer: 'Twenti',
+            });
             QRCode.toDataURL(secret.otpauth_url, (err, dataUrl) => {
                 if (err || !dataUrl) {
                     const error = {err: {statusCode: CODE_BAD_REQUEST, message: err}};

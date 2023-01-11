@@ -6,6 +6,7 @@ import {LogInInputDto} from "../../authentication/adapter/in/dto/LogInInputDto";
 import {LogInOutputDto} from "../../authentication/adapter/out/dto/LogInOutputDto";
 import {TokenManager} from "../../authentication/adapter/out/dto/entities/TokenManager";
 import {GenerateQrOutputDto} from "../../authentication/adapter/out/dto/GenerateQrOutputDto";
+import {CheckTokenInputDto} from "../../authentication/adapter/in/dto/CheckTokenInputDto";
 
 export const signUpInputDto: SignUpInputDto = {
     email: '',
@@ -67,4 +68,9 @@ export const generateQrOutputDto: GenerateQrOutputDto = {
     base: '',
     data: '',
     extension: ''
+}
+
+export const checkTokenInputDto: CheckTokenInputDto = {
+    uid: '',
+    token: ''
 }
