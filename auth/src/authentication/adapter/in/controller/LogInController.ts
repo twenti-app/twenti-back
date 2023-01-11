@@ -3,15 +3,21 @@ import {LoginService} from "../../../application/service/Login-service";
 import {LogInInputDto} from "../dto/LogInInputDto";
 import {LogInModel} from "../../../domain/LogInModel";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
-import {CODE_BAD_REQUEST, CODE_OK} from "../../../../shared/enums/Errors";
+import {CODE_BAD_REQUEST, CODE_FORBIDDEN, CODE_OK} from "../../../../shared/enums/Errors";
 import {LogInOutputDto} from "../../out/dto/LogInOutputDto";
+import {FindUserService} from "../../../../user/application/service/FindUser-service";
+import {CreateUserService} from "../../../../user/application/service/CreateUser-service";
 
 export class LogInController extends DefaultController {
     private loginService: LoginService;
+    private findUserService: FindUserService;
+    private createUserservice: CreateUserService;
 
     constructor() {
         super();
         this.loginService = new LoginService();
+        this.findUserService = new FindUserService();
+        this.createUserservice = new CreateUserService();
     }
 
     public logIn() {
@@ -33,9 +39,22 @@ export class LogInController extends DefaultController {
 
             const data: any = await this.loginService.login(user);
             if (data.err) this.setErrData(data.err);
-            const resp = this.err.statusCode === CODE_OK ? this.getOutputDto(data.user) : ErrResponseService(this.err);
+            let resp = this.err.statusCode === CODE_OK ? this.getOutputDto(data.user) : ErrResponseService(this.err);
+            const userData = await this.findUserService.findUserByEmail(user.email);
+            if (this.checkUserData(userData, data?.user)) {
+                this.setErrData({statusCode: CODE_FORBIDDEN, message: '2FA is active'});
+                resp = ErrResponseService(this.err);
+            }
             return res.status(this.err.statusCode).send(resp);
         });
+    }
+
+    private checkUserData(userData, user) {
+        if (userData.err && user) {
+            this.createUserservice.createUser({uid: user.uid, email: user.email}).then();
+            return false;
+        }
+        return userData.isActive2fa;
     }
 
     private getOutputDto(data): LogInOutputDto {
