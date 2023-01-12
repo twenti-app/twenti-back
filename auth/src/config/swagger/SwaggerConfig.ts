@@ -100,7 +100,7 @@ export const swaggerConfig = {
                 }
             }
         },
-        "/generate/{uid}": {
+        "/generate/{email}": {
             "get": {
                 "tags": [
                     "Authentication"
@@ -116,9 +116,9 @@ export const swaggerConfig = {
                 ],
                 "parameters": [
                     {
-                        "name": "uid",
+                        "name": "email",
                         "in": "path",
-                        "description": "Uid",
+                        "description": "Email",
                         "required": true,
                         "type": "string"
                     }

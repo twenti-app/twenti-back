@@ -16,7 +16,6 @@ app.use(bodyParser.json({limit: '50mb'}));
 
 firebaseConfig();
 initMongo();
-
 app.use('/v0/auth', authenticationRoutes);
 app.use('/v0/auth', swaggerUi.serve, swaggerUi.setup(swaggerConfig, null, null, null));
 

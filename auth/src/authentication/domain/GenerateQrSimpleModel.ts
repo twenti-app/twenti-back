@@ -1,5 +1,5 @@
 export interface GenerateQrSimpleModel {
-    userUid: string,
+    email: string,
     base: string,
     extension: string,
     data: string,

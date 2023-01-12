@@ -71,6 +71,6 @@ export const generateQrOutputDto: GenerateQrOutputDto = {
 }
 
 export const checkTokenInputDto: CheckTokenInputDto = {
-    uid: '',
+    email: '',
     token: ''
 }

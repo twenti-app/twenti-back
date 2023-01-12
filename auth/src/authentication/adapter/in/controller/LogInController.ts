@@ -7,6 +7,7 @@ import {CODE_BAD_REQUEST, CODE_FORBIDDEN, CODE_OK} from "../../../../shared/enum
 import {LogInOutputDto} from "../../out/dto/LogInOutputDto";
 import {FindUserService} from "../../../../user/application/service/FindUser-service";
 import {CreateUserService} from "../../../../user/application/service/CreateUser-service";
+import {redisClient} from "../../../../config/RedisConfig";
 
 export class LogInController extends DefaultController {
     private loginService: LoginService;
@@ -40,10 +41,12 @@ export class LogInController extends DefaultController {
             const data: any = await this.loginService.login(user);
             if (data.err) this.setErrData(data.err);
             let resp = this.err.statusCode === CODE_OK ? this.getOutputDto(data.user) : ErrResponseService(this.err);
-            const userData = await this.findUserService.findUserByEmail(user.email);
+            const userData: any = await this.findUserService.findUserByEmail(user.email);
             if (this.checkUserData(userData, data?.user)) {
                 this.setErrData({statusCode: CODE_FORBIDDEN, message: '2FA is active'});
                 resp = ErrResponseService(this.err);
+                redisClient.set(userData.email, JSON.stringify(data?.user));
+                redisClient.expire(userData.email, 120);
             }
             return res.status(this.err.statusCode).send(resp);
         });

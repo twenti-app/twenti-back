@@ -1,4 +1,4 @@
 export interface CheckTokenInputDto {
-    uid: string;
+    email: string;
     token: string;
 }
