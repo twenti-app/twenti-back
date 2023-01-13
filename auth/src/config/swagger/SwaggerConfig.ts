@@ -3,7 +3,7 @@ import {
     checkTokenInputDto,
     generateQrOutputDto,
     logInInputDto,
-    logInOutputDto,
+    logInOutputDto, refreshTokenOutputDTO,
     signUpInputDto,
     signUpOutputDto
 } from "./DefaultValues";
@@ -163,6 +163,34 @@ export const swaggerConfig = {
                     }
                 }
             }
+        },
+        "/refreshToken/{refreshToken}": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresh user token",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "refreshToken",
+                        "in": "path",
+                        "description": "RefreshToken",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/refreshTokenOutputDTO"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -189,6 +217,10 @@ export const swaggerConfig = {
         "checkTokenInputDto": {
             "type": "object",
             "properties": toDefinition(checkTokenInputDto)
+        },
+        "refreshTokenOutputDTO": {
+            "type": "object",
+            "properties": toDefinition(refreshTokenOutputDTO)
         }
     },
     "components": {

@@ -7,6 +7,7 @@ import {LogInOutputDto} from "../../authentication/adapter/out/dto/LogInOutputDt
 import {TokenManager} from "../../authentication/adapter/out/dto/entities/TokenManager";
 import {GenerateQrOutputDto} from "../../authentication/adapter/out/dto/GenerateQrOutputDto";
 import {CheckTokenInputDto} from "../../authentication/adapter/in/dto/CheckTokenInputDto";
+import {RefreshTokenOutputDto} from "../../authentication/adapter/out/dto/RefreshTokenOutputDto";
 
 export const signUpInputDto: SignUpInputDto = {
     email: '',
@@ -73,4 +74,10 @@ export const generateQrOutputDto: GenerateQrOutputDto = {
 export const checkTokenInputDto: CheckTokenInputDto = {
     email: '',
     token: ''
+}
+
+export const refreshTokenOutputDTO: RefreshTokenOutputDto = {
+    accessToken: '',
+    refreshToken: '',
+    expiresIn: 0
 }
