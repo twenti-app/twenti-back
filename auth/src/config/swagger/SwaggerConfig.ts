@@ -191,6 +191,69 @@ export const swaggerConfig = {
                     }
                 }
             }
+        },
+        "/signOut/{uid}": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign out",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "path",
+                        "description": "Uid",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/refreshTokenOutputDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/deleteUser/{uid}": {
+            "delete": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Delete user",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "path",
+                        "description": "User uid",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    }
+                }
+            }
         }
     },
     "definitions": {
