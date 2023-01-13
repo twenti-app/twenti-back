@@ -45,7 +45,7 @@ export class GenerateQrController extends DefaultController {
                     email: req.params.email,
                     secret: secret.base32,
                 }
-                this.saveGenerateQrService.saveGenerateQr(savedData)
+                this.saveGenerateQrService.saveGenerateQr(savedData);
                 return res.status(this.err.statusCode).send(resp);
             });
         });

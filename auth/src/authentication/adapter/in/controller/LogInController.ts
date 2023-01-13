@@ -12,13 +12,13 @@ import {redisClient} from "../../../../config/RedisConfig";
 export class LogInController extends DefaultController {
     private loginService: LoginService;
     private findUserService: FindUserService;
-    private createUserservice: CreateUserService;
+    private createUserService: CreateUserService;
 
     constructor() {
         super();
         this.loginService = new LoginService();
         this.findUserService = new FindUserService();
-        this.createUserservice = new CreateUserService();
+        this.createUserService = new CreateUserService();
     }
 
     public logIn() {
@@ -45,7 +45,7 @@ export class LogInController extends DefaultController {
             if (this.checkUserData(userData, data?.user)) {
                 this.setErrData({statusCode: CODE_FORBIDDEN, message: '2FA is active'});
                 resp = ErrResponseService(this.err);
-                redisClient.set(userData.email, JSON.stringify(data?.user));
+                redisClient.setnx(userData.email, JSON.stringify(data?.user));
                 redisClient.expire(userData.email, 120);
             }
             return res.status(this.err.statusCode).send(resp);
@@ -54,7 +54,7 @@ export class LogInController extends DefaultController {
 
     private checkUserData(userData, user) {
         if (userData.err && user) {
-            this.createUserservice.createUser({uid: user.uid, email: user.email}).then();
+            this.createUserService.createUser({uid: user.uid, email: user.email}).then();
             return false;
         }
         return userData.isActive2fa;
