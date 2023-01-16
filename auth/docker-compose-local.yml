@@ -1,0 +1,22 @@
+version: '3'
+services:
+  service:
+    container_name: auth
+    image: auth
+    build:
+      context: "../"
+      dockerfile: auth/Dockerfile
+    expose:
+      - 3000
+    ports:
+      - "3000:3000"
+    networks:
+      - twenti
+    restart: always
+    environment:
+      SERVICE_NAME: auth
+      PROFILE: local
+      CONFIG_SERVER_URI: http://config:8888
+networks:
+  twenti:
+    external: true

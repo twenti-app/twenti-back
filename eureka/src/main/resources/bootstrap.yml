@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ${SERVICE_NAME:eureka}
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI:http://config:8888}
+      fail-fast: 'true'
+  profiles:
+    active: ${PROFILE:local}

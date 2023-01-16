@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ${SERVICE_NAME}
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+      fail-fast: 'true'
+  profiles:
+    active: ${PROFILE}
