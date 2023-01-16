@@ -15,7 +15,7 @@ export function isOwner(req, res, next) {
     }
     const token = bearer.includes('bearer') ? bearer.split(' ')[1] : bearer;
     getAuth()
-        .verifyIdToken(token)
+        .verifyIdToken(token, true)
         .then((decodedToken) => {
             const uid = decodedToken.uid;
             if (uid !== (req?.params?.uid ?? req?.body?.uid)) {
@@ -51,7 +51,7 @@ export function isOwnerEmail(req, res, next) {
     }
     const token = bearer.includes('bearer') ? bearer.split(' ')[1] : bearer;
     getAuth()
-        .verifyIdToken(token)
+        .verifyIdToken(token, true)
         .then((decodedToken) => {
             const email = decodedToken.email;
             if (email !== (req?.params?.email ?? req?.body?.email)) {

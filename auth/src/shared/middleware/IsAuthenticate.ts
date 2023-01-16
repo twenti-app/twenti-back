@@ -15,7 +15,7 @@ export function authenticate(req, res, next) {
     }
     const token = bearer.includes('bearer') ? bearer.split(' ')[1] : bearer;
     getAuth()
-        .verifyIdToken(token)
+        .verifyIdToken(token, true)
         .then((decodedToken) => {
             if (decodedToken.email_verified) {
                 next();
