@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  service:
+    container_name: eureka
+    image: eureka
+    build:
+      context: ""
+      dockerfile: ./Dockerfile
+    expose:
+      - 8761
+    ports:
+      - "8761:8761"
+    networks:
+      - twenti
+    restart: always
+    environment:
+      SERVICE_NAME: eureka
+      PROFILE: pro
+      CONFIG_SERVER_URI: http://config:8888
+networks:
+  twenti:
+    external: true
