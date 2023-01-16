@@ -1,0 +1,18 @@
+version: '3.5'
+services:
+  service:
+    container_name: config
+    image: config
+    build:
+      context: ""
+      dockerfile: ./Dockerfile
+    expose:
+      - 8888
+    ports:
+      - "8888:8888"
+    networks:
+      - twenti
+    restart: always
+networks:
+  twenti:
+    external: true
