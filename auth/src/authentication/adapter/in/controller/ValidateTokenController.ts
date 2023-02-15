@@ -48,7 +48,7 @@ export class ValidateTokenController extends DefaultController {
     private getOutputDto(email: string) {
         return redisClient.get(email).then(data => {
             if (!data) {
-                const error = {statusCode: CODE_FORBIDDEN, message: 'Preguntar a Pablo'};
+                const error = {statusCode: CODE_FORBIDDEN, message: 'Login is required'};
                 this.setErrData(error);
                 return ErrResponseService(this.err);
             }

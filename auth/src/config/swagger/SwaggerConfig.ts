@@ -225,7 +225,7 @@ export const swaggerConfig = {
                 }
             }
         },
-        "/deleteUser/{uid}": {
+        "/delete/{uid}": {
             "delete": {
                 "tags": [
                     "Authentication"
