@@ -7,6 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import {swaggerConfig} from "./config/swagger/SwaggerConfig";
 import {initEureka} from "./config/EurekaConfig";
 import actuator, {Options} from "express-actuator";
+import {userRoutes} from "./user/routes";
 
 const app = express();
 const PORT = 3000;
@@ -29,6 +30,7 @@ const options: Options = {
 
 app.use(actuator(options));
 app.use('/v0/auth', authenticationRoutes);
+app.use('/v0/auth/user', userRoutes);
 app.use('/v0/auth', swaggerUi.serve, swaggerUi.setup(swaggerConfig, null, null, null));
 
 app.listen(PORT, () => {

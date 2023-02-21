@@ -1,11 +1,11 @@
 import {toDefinition} from "../../shared/stringUtils/ToDefinition";
 import {
-    checkTokenInputDto,
+    checkTokenInputDto, faValue,
     generateQrOutputDto,
     logInInputDto,
     logInOutputDto, refreshTokenOutputDTO,
     signUpInputDto,
-    signUpOutputDto
+    signUpOutputDto, userOutoutDto
 } from "./DefaultValues";
 
 export const swaggerConfig = {
@@ -25,6 +25,10 @@ export const swaggerConfig = {
         {
             "name": "Authentication",
             "description": "Authentication endpoints"
+        },
+        {
+            "name": "User",
+            "description": "User endpoints"
         }
     ],
     "schemes": [
@@ -254,6 +258,49 @@ export const swaggerConfig = {
                     }
                 }
             }
+        },
+        "/user/update2FA/{uid}": {
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update 2fa value of user",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "path",
+                        "description": "Uid",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Value of 2fa",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#definitions/2faValue"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/userOutputDTO"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -284,6 +331,14 @@ export const swaggerConfig = {
         "refreshTokenOutputDTO": {
             "type": "object",
             "properties": toDefinition(refreshTokenOutputDTO)
+        },
+        "2faValue": {
+            "type": "object",
+            "properties": toDefinition(faValue)
+        },
+        "userOutputDTO": {
+            "type": "object",
+            "properties": toDefinition(userOutoutDto)
         }
     },
     "components": {
