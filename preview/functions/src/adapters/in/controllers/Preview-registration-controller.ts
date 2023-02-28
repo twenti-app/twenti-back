@@ -14,7 +14,7 @@ export class PreviewRegistrationController extends DefaultController {
     private findUserByEmailService: FindUserByEmailService;
 
     readonly mainPlatformValues = ['mobile', 'web'];
-
+    readonly availableLanguages = ['spanish', 'english', 'basque', 'catalan', 'hungarian']
     constructor() {
         super();
         this.previewRegistrationRegistration = new PreviewRegistrationService();
@@ -27,7 +27,8 @@ export class PreviewRegistrationController extends DefaultController {
             email: request.body.email,
             name: request.body.name,
             reason: request.body.reason,
-            mainPlatform: request.body.mainPlatform
+            mainPlatform: request.body.mainPlatform,
+            language: request.body.language
         };
         if (!previewRegistrationInputDto.email) {
             this.setErrData({statusCode: 400, message: "Email is required"});
@@ -65,6 +66,8 @@ export class PreviewRegistrationController extends DefaultController {
                     reason: previewRegistrationInputDto.reason,
                     name: previewRegistrationInputDto.name,
                     mainPlatform: previewRegistrationInputDto.mainPlatform,
+                    language: this.availableLanguages.includes(previewRegistrationInputDto.language?.toLocaleLowerCase())
+                                ? previewRegistrationInputDto.language : 'english',
                     requestedDate: new Date().toISOString(),
                     updatedDate: new Date().toISOString(),
                     ip: ip ?? "",

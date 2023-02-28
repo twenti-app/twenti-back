@@ -3,4 +3,5 @@ export interface PreviewRegistrationInputDto {
     reason: string;
     name: string;
     mainPlatform: string;
+    language: string;
 }

@@ -3,6 +3,7 @@ export interface PreviewRegistrationModel {
     reason: string;
     name: string;
     mainPlatform: string;
+    language: string;
     status: any;
     requestedDate: string;
     updatedDate: string;
