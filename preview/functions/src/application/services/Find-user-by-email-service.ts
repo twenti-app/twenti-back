@@ -10,7 +10,7 @@ export class FindUserByEmailService implements FindUserByEmailPort {
             this.startConfig();
         }
         try {
-            const userCollection = this.db?.collection("twenti-preview");
+            const userCollection = this.db?.collection("twenti-waitlist");
             const users = await userCollection?.get();
             const result: any = [];
             await users?.forEach((doc) => {
