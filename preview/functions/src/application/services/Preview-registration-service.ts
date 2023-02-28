@@ -13,7 +13,7 @@ export class PreviewRegistrationService implements PreviewRegistrationPort {
         }
         try {
             const uuid = crypto.randomUUID();
-            const userCollection = this.db?.collection("twenti-preview");
+            const userCollection = this.db?.collection("twenti-waitlist");
             const user = userCollection?.doc(uuid);
             const enc = new TextEncoder();
             const saveData = await encryptData(enc.encode(JSON.stringify(data)));
