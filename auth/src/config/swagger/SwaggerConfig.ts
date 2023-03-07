@@ -19,7 +19,7 @@ export const swaggerConfig = {
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "localhost:3000",
+    "host": "localhost:8080",
     "basePath": "/v0/auth",
     "tags": [
         {
