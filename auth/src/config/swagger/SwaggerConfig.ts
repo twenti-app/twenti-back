@@ -19,7 +19,7 @@ export const swaggerConfig = {
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "localhost:8080",
+    "host": "localhost:3000",
     "basePath": "/v0/auth",
     "tags": [
         {
@@ -232,7 +232,7 @@ export const swaggerConfig = {
         "/delete/{uid}": {
             "delete": {
                 "tags": [
-                    "Authentication"
+                    "User"
                 ],
                 "summary": "Delete user",
                 "produces": [

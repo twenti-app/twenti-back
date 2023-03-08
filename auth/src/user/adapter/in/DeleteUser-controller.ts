@@ -1,8 +1,8 @@
-import {CODE_OK} from "../../../../shared/enums/Errors";
-import {ErrResponseService} from "../../../../shared/errors/ErrorService";
-import {isOwner} from "../../../../shared/middleware/IsOwner";
-import {DefaultController} from "../../../../shared/objectUtils/DefaultController";
-import {DeleteUserService} from "../../../application/service/DeleteUser-service";
+import {CODE_OK} from "../../../shared/enums/Errors";
+import {ErrResponseService} from "../../../shared/errors/ErrorService";
+import {isOwner} from "../../../shared/middleware/IsOwner";
+import {DefaultController} from "../../../shared/objectUtils/DefaultController";
+import {DeleteUserService} from "../../application/service/DeleteUser-service";
 
 export class DeleteUserController extends DefaultController {
     private deleteUserService: DeleteUserService;
