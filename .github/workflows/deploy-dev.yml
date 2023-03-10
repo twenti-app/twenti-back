@@ -1,0 +1,23 @@
+name: Deploy Containers
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+      - name: Copy SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem && chmod 400 ssh_key.pem
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ssh_key.pem
+      - name: Add SSH key to agent
+        run: ssh-add ssh_key.pem
+      - name: SSH into instance and deploy config container
+        run: ssh -o StrictHostKeyChecking=no ec2-user@16.170.215.173 'sudo docker-compose -f docker-compose.yml up --build'
