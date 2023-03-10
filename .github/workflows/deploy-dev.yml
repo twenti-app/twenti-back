@@ -12,7 +12,7 @@ jobs:
       - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client
       - name: Copy SSH key
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem && chmod 400 ssh_key.pem
+        run: echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" > ssh_key.pem && chmod 400 ssh_key.pem
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.4.1
         with:
