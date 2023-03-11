@@ -33,4 +33,4 @@ jobs:
           java-version: 19
 
       - name: Build project with Maven
-        run: mvn -B package --file config/pom.xml
+        run: mvn package -f config/pom.xml
