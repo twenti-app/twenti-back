@@ -22,6 +22,7 @@ jobs:
 
       - name: Add SSH key
         run: |
+          eval "$(ssh-agent -s)"
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
