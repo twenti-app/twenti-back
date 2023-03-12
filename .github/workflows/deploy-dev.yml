@@ -5,10 +5,5 @@ on:
     branches:
       - main
 
-env:
-  INSTANCE_IP: ${{ secrets.INSTANCE_IP_DEV }}
-  PEM_FILE: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
-
-jobs:
-  include:
-    - local : config/deploy-dev.yml
+include:
+  - local : config/deploy-dev.yml
