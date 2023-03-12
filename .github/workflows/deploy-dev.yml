@@ -33,8 +33,8 @@ jobs:
 
       - name: Construir y empujar la imagen de Docker
         run: |
-          docker-compose -f config/docker-compose.yml build
-          docker-compose -f config/docker-compose.yml push rumabe97/twenti-dev:config
+          docker-compose -f config/docker-compose.yml build --build-arg IMAGE_TAG=${{ github.sha }} config
+          docker-compose -f config/docker-compose.yml push rumabe97/twenti-dev
 
       - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client
