@@ -1,10 +1,5 @@
 name: Deploy-config
 
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   deploy-config:
     runs-on: ubuntu-latest

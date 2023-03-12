@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  - deploy-config
+  config:
+    uses: config/deploy-dev.yml
 
 includes:
   - local : config/deploy-dev.yml
