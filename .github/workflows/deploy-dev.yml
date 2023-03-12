@@ -34,8 +34,8 @@ jobs:
       - name: Construir y empujar la imagen de Docker
         run: |
           docker-compose -f config/docker-compose.yml build
-          docker tag config rumabe97/twenti-dev:config
-          docker push rumabe97/twenti-dev:config
+          docker tag config twentiapp/dev:config
+          docker push twentiapp/dev:config
 
       - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client
@@ -52,9 +52,9 @@ jobs:
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME_DEV }} -p ${{ secrets.DOCKERHUB_TOKEN_DEV }}
 
       - name: Pull image
-        run: docker pull rumabe97/twenti-dev:config
+        run: docker pull twentiapp/dev:config
 
       - name: Run config
         run: |
-          docker tag rumabe97/twenti-dev:config config
+          docker tag twentiapp/dev:config config
           docker run -d -p 8888:8888  config
