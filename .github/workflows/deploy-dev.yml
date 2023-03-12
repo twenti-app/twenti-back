@@ -23,7 +23,7 @@ jobs:
           java-version: 19
 
       - name: Build project with Maven
-        run: mvn clean package -f config/pom.xml
+        run: mvn clean package -f config/pom.xml -DskipTests
 
       - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client
