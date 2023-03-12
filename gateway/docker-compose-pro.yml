@@ -1,20 +1,22 @@
 version: '3.5'
 services:
   service:
-    container_name: config
-    image: config
+    container_name: gateway
+    image: gateway
     build:
       context: ""
       dockerfile: ./Dockerfile
-      args:
-        IMAGE_TAG: latest
     expose:
-      - 8888
+      - 8765
     ports:
-      - "8888:8888"
+      - "8080:8080"
     networks:
       - twenti
     restart: always
+    environment:
+      SERVICE_NAME: gateway
+      PROFILE: pro
+      CONFIG_SERVER_URI: http://config:8888
 networks:
   twenti:
     external: true

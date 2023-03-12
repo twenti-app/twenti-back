@@ -31,7 +31,7 @@ export const app = functions.https.onRequest(async (request, response) => {
             });
             return;
         }
-        if (request.path === "/v0/preview-registration" && request.method === 'POST') {
+        if (request.path === "/v0/waitlist" && request.method === 'POST') {
             await previewRegistrationController.previewRegistration(request, ipAddress).then((res) => {
                 response.status(res?.statusCode ?? 400).send(res);
                 return;

@@ -13,6 +13,8 @@ export class PreviewRegistrationController extends DefaultController {
 
     private findUserByEmailService: FindUserByEmailService;
 
+    readonly mainPlatformValues = ['mobile', 'web'];
+    readonly availableLanguages = ['spanish', 'english', 'basque', 'catalan', 'hungarian']
     constructor() {
         super();
         this.previewRegistrationRegistration = new PreviewRegistrationService();
@@ -23,14 +25,29 @@ export class PreviewRegistrationController extends DefaultController {
         this.defaultErrData();
         const previewRegistrationInputDto: PreviewRegistrationInputDto = {
             email: request.body.email,
-            reason: request.body.reason
+            name: request.body.name,
+            reason: request.body.reason,
+            mainPlatform: request.body.mainPlatform,
+            language: request.body.language
         };
         if (!previewRegistrationInputDto.email) {
             this.setErrData({statusCode: 400, message: "Email is required"});
             return this.err;
         }
+        if (!previewRegistrationInputDto.name) {
+                    this.setErrData({statusCode: 400, message: "Name is required"});
+                    return this.err;
+        }
+        if (!previewRegistrationInputDto.mainPlatform) {
+                    this.setErrData({statusCode: 400, message: "Main platform is required"});
+                    return this.err;
+        }
         if (!emailVerified(previewRegistrationInputDto.email)) {
             this.setErrData({statusCode: 422, message: "Invalid email"});
+            return this.err;
+        }
+        if (!this.mainPlatformValues.includes(previewRegistrationInputDto.mainPlatform.toLocaleLowerCase())) {
+            this.setErrData({statusCode: 422, message: "Invalid main platform"});
             return this.err;
         }
         return this.findUserByEmailService
@@ -47,6 +64,10 @@ export class PreviewRegistrationController extends DefaultController {
                     email: previewRegistrationInputDto.email,
                     status: "Requested",
                     reason: previewRegistrationInputDto.reason,
+                    name: previewRegistrationInputDto.name,
+                    mainPlatform: previewRegistrationInputDto.mainPlatform,
+                    language: this.availableLanguages.includes(previewRegistrationInputDto.language?.toLocaleLowerCase())
+                                ? previewRegistrationInputDto.language : 'english',
                     requestedDate: new Date().toISOString(),
                     updatedDate: new Date().toISOString(),
                     ip: ip ?? "",

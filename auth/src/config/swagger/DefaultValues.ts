@@ -8,6 +8,7 @@ import {TokenManager} from "../../authentication/adapter/out/dto/entities/TokenM
 import {GenerateQrOutputDto} from "../../authentication/adapter/out/dto/GenerateQrOutputDto";
 import {CheckTokenInputDto} from "../../authentication/adapter/in/dto/CheckTokenInputDto";
 import {RefreshTokenOutputDto} from "../../authentication/adapter/out/dto/RefreshTokenOutputDto";
+import {UserOutputDto} from "../../user/adapter/out/dto/UserOutputDto";
 
 export const signUpInputDto: SignUpInputDto = {
     email: '',
@@ -80,4 +81,16 @@ export const refreshTokenOutputDTO: RefreshTokenOutputDto = {
     accessToken: '',
     refreshToken: '',
     expiresIn: 0
+}
+
+export const faValue = {
+    isActive2fa: false
+}
+
+export const userOutoutDto: UserOutputDto = {
+    email: '',
+    uid: '',
+    consumedInvitations: 0,
+    availableInvitations: 0,
+    isActive2fa: false
 }
