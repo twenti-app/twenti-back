@@ -6,6 +6,8 @@ services:
     build:
       context: ""
       dockerfile: ./Dockerfile
+      args:
+        IMAGE_TAG: latest
     expose:
       - 8888
     ports:
