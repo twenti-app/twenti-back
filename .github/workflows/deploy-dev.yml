@@ -5,5 +5,8 @@ on:
     branches:
       - main
 
+jobs:
+  - deploy-config
+
 include:
   - local : config/deploy-dev.yml
