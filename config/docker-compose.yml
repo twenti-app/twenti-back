@@ -7,7 +7,7 @@ services:
       context: ""
       dockerfile: ./Dockerfile
       args:
-        IMAGE_TAG: rumabe97/twenti-dev:config
+        IMAGE_TAG: config
     expose:
       - 8888
     ports:
