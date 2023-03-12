@@ -57,4 +57,4 @@ jobs:
       - name: Run config
         run: |
           docker tag rumabe97/twenti-dev:config config
-          docker run -d p 8888:8888  config
+          docker run -d -p 8888:8888  config
