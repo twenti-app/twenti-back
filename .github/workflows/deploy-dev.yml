@@ -47,3 +47,12 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
+
+      - name: Login to docker hub
+        run: docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+
+      - name: Pull image
+        run: docker pull rumabe97/twenti-dev:config
+
+      - name: Run config
+        run: docker run -d config
