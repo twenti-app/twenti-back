@@ -34,6 +34,7 @@ jobs:
       - name: Construir y empujar la imagen de Docker
         run: |
           docker-compose -f config/docker-compose.yml build
+          docker tag config rumabe97/twenti-dev:config
           docker push rumabe97/twenti-dev:config
 
       - name: Install SSH client
