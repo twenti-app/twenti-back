@@ -48,6 +48,7 @@ jobs:
 
         - name: Pull image
           run: |
+            pwd
             docker pull twentiapp/dev:eureka
             docker tag twentiapp/dev:eureka eureka
 
