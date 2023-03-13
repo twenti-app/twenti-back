@@ -28,7 +28,7 @@ jobs:
 
         - name: Construir y empujar la imagen de Docker
           run: |
-            docker build -f eureka/Dockerfile --no-cache=true eureka .
+            docker build -f eureka/Dockerfile --no-cache=true -t eureka eureka/
             docker tag eureka twentiapp/dev:eureka
             docker push twentiapp/dev:eureka
 
