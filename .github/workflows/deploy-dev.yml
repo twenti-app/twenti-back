@@ -57,5 +57,4 @@ jobs:
 
         - name: Run container
           run: |
-            ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173
-            docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f
+            ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f"
