@@ -31,7 +31,6 @@ jobs:
           docker build -f eureka/Dockerfile --no-cache=true -t eureka eureka/
           docker tag eureka twentiapp/dev:eureka
           docker push twentiapp/dev:eureka
-
   deploy-eureka:
     needs: build-eureka
     runs-on: ubuntu-latest
@@ -49,7 +48,6 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
-
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME_DEV }} -p ${{ secrets.DOCKERHUB_TOKEN_DEV }}
 
@@ -57,11 +55,9 @@ jobs:
         run: |
           docker pull twentiapp/dev:eureka
           docker tag twentiapp/dev:eureka eureka
-
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user/eureka
-
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/eureka/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/eureka/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f"
