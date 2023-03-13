@@ -1,0 +1,62 @@
+name: Deploy-all
+
+jobs:
+  build-eureka:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 19
+        uses: actions/setup-java@v1
+        with:
+          java-version: 19
+
+      - name: Build project with Maven
+        run: mvn clean package -f eureka/pom.xml -DskipTests
+
+      - name: Login a Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME_DEV }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD_DEV }}
+
+      - name: Construir y empujar la imagen de Docker
+        run: |
+          docker build -f eureka/Dockerfile --no-cache=true -t eureka eureka/
+          docker tag eureka twentiapp/dev:eureka
+          docker push twentiapp/dev:eureka
+
+  deploy-eureka:
+    needs: build-eureka
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+
+      - name: Add SSH key
+        run: |
+          eval "$(ssh-agent -s)"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME_DEV }} -p ${{ secrets.DOCKERHUB_TOKEN_DEV }}
+
+      - name: Pull image
+        run: |
+          docker pull twentiapp/dev:eureka
+          docker tag twentiapp/dev:eureka eureka
+
+      - name: Copy docker-compose
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user/eureka
+
+      - name: Run container
+        run: |
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/eureka/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/eureka/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f"
