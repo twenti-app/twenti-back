@@ -148,7 +148,7 @@ jobs:
           docker tag twentiapp/dev:gateway gateway
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa admin/docker-compose-gateway-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa gateway/docker-compose-gateway-dev.yml ec2-user@16.170.215.173:/home/ec2-user
       - name: Run container
         run: |
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway down && docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway up -d && docker image prune -a -f"
