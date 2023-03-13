@@ -47,10 +47,13 @@ jobs:
           run: docker login -u ${{ secrets.DOCKERHUB_USERNAME_DEV }} -p ${{ secrets.DOCKERHUB_TOKEN_DEV }}
 
         - name: Pull image
-          run: docker pull twentiapp/dev:eureka
-
-        - name: Run eureka
           run: |
+            docker pull twentiapp/dev:eureka
             docker tag twentiapp/dev:eureka eureka
+
+        - name: Copy docker-compose
+          run: |
             scp -i ${{ secrets.SSH_PRIVATE_KEY_DEV }} eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user
-            docker compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f
+
+        - name: Run container
+          run: docker compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f
