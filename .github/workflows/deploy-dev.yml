@@ -57,6 +57,7 @@ jobs:
 
         - name: Copy docker-compose
           run: |
+            dir
             scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user
 
         - name: Run container
