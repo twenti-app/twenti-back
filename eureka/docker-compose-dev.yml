@@ -2,7 +2,7 @@ version: '3.5'
 services:
   service:
     container_name: eureka
-    image: eureka
+    image: twentiapp/dev:eureka
     expose:
       - 8761
     ports:
