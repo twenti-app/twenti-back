@@ -57,5 +57,5 @@ jobs:
 
         - name: Run container
           run: |
-            ssh-add ~/.ssh/id_rsa
+            pwd
             docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f
