@@ -9,5 +9,7 @@ jobs:
   build_and_deploy_eureka:
     runs-on: ubuntu-latest
     steps:
+      - name: Build and Deploy Eureka
+        uses: actions/checkout@v2
       - name: Build Eureka
         uses: ../../eureka/deploy-eureka.dev.yml
