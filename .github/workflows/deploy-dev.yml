@@ -24,11 +24,11 @@ jobs:
           ssh-add ~/.ssh/id_rsa
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-mongo.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-mongo.yml ec2-user@${{ SERVER_IP_DEV  }}:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo down && docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo up -d && docker image prune -a -f"
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-mongo.yml"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo down && docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "rm /home/ec2-user/docker-compose-mongo.yml"
 
   deploy-redis:
     needs: deploy-mongo
@@ -49,11 +49,11 @@ jobs:
           ssh-add ~/.ssh/id_rsa
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-redis.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-redis.yml ec2-user@${{ SERVER_IP_DEV  }}:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis down && docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis up -d && docker image prune -a -f"
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-redis.yml"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis down && docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "rm /home/ec2-user/docker-compose-redis.yml"
 
   deploy-config:
     needs: deploy-redis
@@ -81,11 +81,11 @@ jobs:
           docker tag twentiapp/dev:config config
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa config/docker-compose-config-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa config/docker-compose-config-dev.yml ec2-user@${{ SERVER_IP_DEV  }}:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-config-dev.yml -p config down && docker-compose -f /home/ec2-user/docker-compose-config-dev.yml -p config up -d && docker image prune -a -f"
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-config-dev.yml"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "docker-compose -f /home/ec2-user/docker-compose-config-dev.yml -p config down && docker-compose -f /home/ec2-user/docker-compose-config-dev.yml -p config up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "rm /home/ec2-user/docker-compose-config-dev.yml"
 
   deploy-auth:
     needs: deploy-config
@@ -113,11 +113,11 @@ jobs:
           docker tag twentiapp/dev:auth auth
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa auth/docker-compose-auth-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa auth/docker-compose-auth-dev.yml ec2-user@${{ SERVER_IP_DEV  }}:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-auth-dev.yml -p auth down && docker-compose -f /home/ec2-user/docker-compose-auth-dev.yml -p auth up -d && docker image prune -a -f"
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-auth-dev.yml"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "docker-compose -f /home/ec2-user/docker-compose-auth-dev.yml -p auth down && docker-compose -f /home/ec2-user/docker-compose-auth-dev.yml -p auth up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "rm /home/ec2-user/docker-compose-auth-dev.yml"
 
   build-eureka:
     needs: deploy-config
@@ -171,11 +171,11 @@ jobs:
           docker tag twentiapp/dev:eureka eureka
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-eureka-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-eureka-dev.yml ec2-user@${{ SERVER_IP_DEV  }}:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-eureka-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-eureka-dev.yml -p eureka up -d && docker image prune -a -f"
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-eureka-dev.yml"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "docker-compose -f /home/ec2-user/docker-compose-eureka-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-eureka-dev.yml -p eureka up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "rm /home/ec2-user/docker-compose-eureka-dev.yml"
 
   build-gateway:
     needs: deploy-config
@@ -230,11 +230,11 @@ jobs:
           docker tag twentiapp/dev:gateway gateway
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa gateway/docker-compose-gateway-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa gateway/docker-compose-gateway-dev.yml ec2-user@${{ SERVER_IP_DEV  }}:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway down && docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway up -d && docker image prune -a -f"
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-gateway-dev.yml"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway down && docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "rm /home/ec2-user/docker-compose-gateway-dev.yml"
 
   build-admin:
     needs: deploy-config
@@ -289,8 +289,8 @@ jobs:
           docker tag twentiapp/dev:admin admin
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa admin/docker-compose-admin-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa admin/docker-compose-admin-dev.yml ec2-user@${{ SERVER_IP_DEV  }}:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-admin-dev.yml -p admin down && docker-compose -f /home/ec2-user/docker-compose-admin-dev.yml -p admin up -d && docker image prune -a -f"
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-admin-dev.yml"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "docker-compose -f /home/ec2-user/docker-compose-admin-dev.yml -p admin down && docker-compose -f /home/ec2-user/docker-compose-admin-dev.yml -p admin up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ SERVER_IP_DEV  }} "rm /home/ec2-user/docker-compose-admin-dev.yml"
