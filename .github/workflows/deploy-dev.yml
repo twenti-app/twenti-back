@@ -33,6 +33,7 @@ jobs:
             docker push twentiapp/dev:eureka
 
     deploy-eureka:
+      needs: build-eureka
       runs-on: ubuntu-latest
       steps:
         - name: Install SSH client
