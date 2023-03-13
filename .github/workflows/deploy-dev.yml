@@ -56,4 +56,4 @@ jobs:
             scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user
 
         - name: Run container
-          run: docker compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f
+          run: docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f
