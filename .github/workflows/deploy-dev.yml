@@ -48,7 +48,6 @@ jobs:
 
         - name: Pull image
           run: |
-            pwd
             docker pull twentiapp/dev:eureka
             docker tag twentiapp/dev:eureka eureka
 
@@ -58,5 +57,5 @@ jobs:
 
         - name: Run container
           run: |
-            pwd
+            tree
             docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f
