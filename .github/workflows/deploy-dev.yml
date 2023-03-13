@@ -6,6 +6,58 @@ on:
       - main
 
 jobs:
+  deploy-mongo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+
+      - name: Add SSH key
+        run: |
+          eval "$(ssh-agent -s)"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME_DEV }} -p ${{ secrets.DOCKERHUB_TOKEN_DEV }}
+      - name: Copy docker-compose
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-mongo.yml ec2-user@16.170.215.173:/home/ec2-user
+      - name: Run container
+        run: |
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p config down && docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p config up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-mongo.yml"
+
+  deploy-redis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+
+      - name: Add SSH key
+        run: |
+          eval "$(ssh-agent -s)"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME_DEV }} -p ${{ secrets.DOCKERHUB_TOKEN_DEV }}
+      - name: Copy docker-compose
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-redis.yml ec2-user@16.170.215.173:/home/ec2-user
+      - name: Run container
+        run: |
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-redis.yml -p config down && docker-compose -f /home/ec2-user/docker-compose-redis.yml -p config up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-redis.yml"
+
   deploy-config:
     runs-on: ubuntu-latest
     steps:
@@ -36,6 +88,38 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-config-dev.yml -p config down && docker-compose -f /home/ec2-user/docker-compose-config-dev.yml -p config up -d && docker image prune -a -f"
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-config-dev.yml"
+
+  deploy-auth:
+    needs: [deploy-config, deploy-mongo, deploy-redis]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+
+      - name: Add SSH key
+        run: |
+          eval "$(ssh-agent -s)"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME_DEV }} -p ${{ secrets.DOCKERHUB_TOKEN_DEV }}
+
+      - name: Pull image
+        run: |
+          docker pull twentiapp/dev:auth
+          docker tag twentiapp/dev:auth auth
+      - name: Copy docker-compose
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa config/docker-compose-auth-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+      - name: Run container
+        run: |
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-auth-dev.yml -p config down && docker-compose -f /home/ec2-user/docker-compose-auth-dev.yml -p config up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-auth-dev.yml"
 
   build-eureka:
     needs: deploy-config

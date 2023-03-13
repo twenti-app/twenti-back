@@ -2,7 +2,7 @@ version: '3'
 services:
   service:
     container_name: auth
-    image: auth
+    image: twentiapp/dev:auth
     build:
       context: "../"
       dockerfile: auth/Dockerfile
