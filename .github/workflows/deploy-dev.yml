@@ -6,10 +6,8 @@ on:
       - main
 
 jobs:
-  jobs:
     deploy-eureka:
       runs-on: ubuntu-latest
-
       steps:
         - name: Checkout code
           uses: actions/checkout@v2
