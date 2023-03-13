@@ -3,9 +3,6 @@ services:
   service:
     container_name: eureka
     image: eureka
-    build:
-      context: ""
-      dockerfile: ./Dockerfile
     expose:
       - 8761
     ports:
