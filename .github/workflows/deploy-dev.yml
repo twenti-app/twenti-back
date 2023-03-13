@@ -57,7 +57,7 @@ jobs:
           docker tag twentiapp/dev:eureka eureka
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user/eureka
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p eureka up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/eureka/docker-compose-dev.yml -p eureka down && docker-compose -f /home/ec2-user/eurekadocker-compose-dev.yml -p eureka up -d && docker image prune -a -f"
