@@ -2,7 +2,7 @@ version: '3.5'
 services:
   service:
     container_name: admin
-    image: admin
+    image: twentiapp/dev:admin
     build:
       context: ""
       dockerfile: ./Dockerfile
