@@ -31,10 +31,10 @@ jobs:
           docker tag twentiapp/dev:config config
       - name: Copy docker-compose
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa config/docker-compose.yml ec2-user@16.170.215.173:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa config/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user
       - name: Run container
         run: |
-          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose.yml -p config down && docker-compose -f /home/ec2-user/docker-compose.yml -p config up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-dev.yml -p config down && docker-compose -f /home/ec2-user/docker-compose-dev.yml -p config up -d && docker image prune -a -f"
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose.yml"
 
   build-eureka:

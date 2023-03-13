@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  config:
+    container_name: config
+    image: twentiapp/dev:config
+    build:
+      context: ""
+      dockerfile: ./Dockerfile
+      args:
+        IMAGE_TAG: config
+    expose:
+      - 8888
+    ports:
+      - "8888:8888"
+    networks:
+      - twenti
+    restart: always
+networks:
+  twenti:
+    external: true
