@@ -2,7 +2,7 @@ version: '3.5'
 services:
   service:
     container_name: gateway
-    image: gateway
+    image: twentiapp/dev:gateway
     build:
       context: ""
       dockerfile: ./Dockerfile
