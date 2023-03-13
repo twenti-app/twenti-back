@@ -36,6 +36,9 @@ jobs:
       needs: build-eureka
       runs-on: ubuntu-latest
       steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
         - name: Install SSH client
           run: sudo apt-get update && sudo apt-get install -y openssh-client
 
@@ -57,7 +60,6 @@ jobs:
 
         - name: Copy docker-compose
           run: |
-            dir
             scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa eureka/docker-compose-dev.yml ec2-user@16.170.215.173:/home/ec2-user
 
         - name: Run container
