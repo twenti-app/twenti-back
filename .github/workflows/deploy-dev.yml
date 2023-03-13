@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-    deploy-eureka:
+    build-eureka:
       runs-on: ubuntu-latest
       steps:
         - name: Checkout code
@@ -32,6 +32,9 @@ jobs:
             docker tag eureka twentiapp/dev:eureka
             docker push twentiapp/dev:eureka
 
+    deploy-eureka:
+      runs-on: ubuntu-latest
+      steps:
         - name: Install SSH client
           run: sudo apt-get update && sudo apt-get install -y openssh-client
 
