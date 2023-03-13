@@ -95,7 +95,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-eureka-dev.yml -p eureka down && docker-compose -f /home/ec2-user/docker-compose-eureka-dev.yml -p eureka up -d && docker image prune -a -f"
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-eureka-dev.yml"
 
-  build-admin:
+  build-gateway:
     needs: deploy-config
     runs-on: ubuntu-latest
     steps:
@@ -108,7 +108,7 @@ jobs:
           java-version: 19
 
       - name: Build project with Maven
-        run: mvn clean package -f admin/pom.xml -DskipTests
+        run: mvn clean package -f gateway/pom.xml -DskipTests
 
       - name: Login a Docker Hub
         uses: docker/login-action@v1
@@ -154,7 +154,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway down && docker-compose -f /home/ec2-user/docker-compose-gateway-dev.yml -p gateway up -d && docker image prune -a -f"
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@16.170.215.173 "rm /home/ec2-user/docker-compose-gateway-dev.yml"
 
-  build-gategay:
+  build-admin:
     needs: deploy-config
     runs-on: ubuntu-latest
     steps:
