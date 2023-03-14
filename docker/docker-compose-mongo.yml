@@ -10,8 +10,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.10'
-          memory: 100M
+          cpus: '0.20'
+          memory: 200M
 networks:
   twenti:
     external: true
