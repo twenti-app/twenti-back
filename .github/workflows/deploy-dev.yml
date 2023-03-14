@@ -7,7 +7,6 @@ on:
 
 jobs:
   deploy-mongo:
-    needs: deploy-redis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,7 +31,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "rm /home/ec2-user/docker-compose-mongo.yml"
 
   deploy-redis:
-    needs: deploy-mongo
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
