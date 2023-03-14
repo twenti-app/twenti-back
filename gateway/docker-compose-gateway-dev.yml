@@ -3,9 +3,6 @@ services:
   service:
     container_name: gateway
     image: twentiapp/dev:gateway
-    build:
-      context: ""
-      dockerfile: ./Dockerfile
     expose:
       - 8080
     ports:

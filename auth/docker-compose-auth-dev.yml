@@ -3,9 +3,6 @@ services:
   service:
     container_name: auth
     image: twentiapp/dev:auth
-    build:
-      context: "../"
-      dockerfile: auth/Dockerfile
     expose:
       - 3000
     ports:

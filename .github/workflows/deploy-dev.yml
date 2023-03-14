@@ -7,6 +7,7 @@ on:
 
 jobs:
   deploy-mongo:
+    needs: deploy-redis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -56,7 +57,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "rm /home/ec2-user/docker-compose-redis.yml"
 
   deploy-config:
-    needs: deploy-redis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -88,7 +88,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "rm /home/ec2-user/docker-compose-config-dev.yml"
 
   deploy-auth:
-    needs: deploy-config
+    needs: deploy-redis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -145,7 +145,7 @@ jobs:
           docker tag eureka twentiapp/dev:eureka
           docker push twentiapp/dev:eureka
   deploy-eureka:
-    needs: build-eureka
+    needs: [build-eureka, deploy-config]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -203,7 +203,7 @@ jobs:
           docker push twentiapp/dev:gateway
 
   deploy-gateway:
-    needs: build-gateway
+    needs: [build-gateway, deploy-config]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -261,7 +261,7 @@ jobs:
           docker push twentiapp/dev:admin
 
   deploy-admin:
-    needs: build-admin
+    needs: [build-admin, deploy-config]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
