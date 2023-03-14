@@ -6,57 +6,57 @@ on:
       - main
 
 jobs:
-#  deploy-mongo:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Install SSH client
-#        run: sudo apt-get update && sudo apt-get install -y openssh-client
-#
-#      - name: Add SSH key
-#        run: |
-#          eval "$(ssh-agent -s)"
-#          mkdir -p ~/.ssh
-#          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
-#          chmod 600 ~/.ssh/id_rsa
-#          ssh-add ~/.ssh/id_rsa
-#      - name: Copy docker-compose
-#        run: |
-#          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-mongo.yml ec2-user@${{ secrets.SERVER_IP_DEV }}:/home/ec2-user
-#      - name: Run container
-#        run: |
-#          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo down && docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo up -d && docker image prune -a -f"
-#          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "rm /home/ec2-user/docker-compose-mongo.yml"
-#
-#  deploy-redis:
-#    needs: deploy-mongo
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Install SSH client
-#        run: sudo apt-get update && sudo apt-get install -y openssh-client
-#
-#      - name: Add SSH key
-#        run: |
-#          eval "$(ssh-agent -s)"
-#          mkdir -p ~/.ssh
-#          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
-#          chmod 600 ~/.ssh/id_rsa
-#          ssh-add ~/.ssh/id_rsa
-#      - name: Copy docker-compose
-#        run: |
-#          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-redis.yml ec2-user@${{ secrets.SERVER_IP_DEV }}:/home/ec2-user
-#      - name: Run container
-#        run: |
-#          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis down && docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis up -d && docker image prune -a -f"
-#          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "rm /home/ec2-user/docker-compose-redis.yml"
+  deploy-mongo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+
+      - name: Add SSH key
+        run: |
+          eval "$(ssh-agent -s)"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+      - name: Copy docker-compose
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-mongo.yml ec2-user@${{ secrets.SERVER_IP_DEV }}:/home/ec2-user
+      - name: Run container
+        run: |
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo down && docker-compose -f /home/ec2-user/docker-compose-mongo.yml -p mongo up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "rm /home/ec2-user/docker-compose-mongo.yml"
+
+  deploy-redis:
+    needs: deploy-mongo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+
+      - name: Add SSH key
+        run: |
+          eval "$(ssh-agent -s)"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+      - name: Copy docker-compose
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker/docker-compose-redis.yml ec2-user@${{ secrets.SERVER_IP_DEV }}:/home/ec2-user
+      - name: Run container
+        run: |
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis down && docker-compose -f /home/ec2-user/docker-compose-redis.yml -p redis up -d && docker image prune -a -f"
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.SERVER_IP_DEV }} "rm /home/ec2-user/docker-compose-redis.yml"
 
   deploy-config:
-#    needs: deploy-redis
+    needs: deploy-redis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

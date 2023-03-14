@@ -14,6 +14,11 @@ services:
       - "8888:8888"
     networks:
       - twenti
+    deploy:
+      resources:
+        limits:
+          cpus: 0.10
+          memory: 100M
     restart: always
 networks:
   twenti:

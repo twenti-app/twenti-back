@@ -7,6 +7,11 @@ services:
       - "27017:27017"
     networks:
       - twenti
+    deploy:
+      resources:
+        limits:
+          cpus: 0.10
+          memory: 100M
 networks:
   twenti:
     external: true

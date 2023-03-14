@@ -12,6 +12,11 @@ services:
       - "8080:8080"
     networks:
       - twenti
+    deploy:
+      resources:
+        limits:
+          cpus: 0.10
+          memory: 100M
     restart: always
     environment:
       SERVICE_NAME: gateway
