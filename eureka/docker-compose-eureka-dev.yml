@@ -9,11 +9,6 @@ services:
       - "8761:8761"
     networks:
       - twenti
-    deploy:
-      resources:
-        limits:
-          cpus: '0.20'
-          memory: 200M
     restart: always
     environment:
       SERVICE_NAME: eureka
