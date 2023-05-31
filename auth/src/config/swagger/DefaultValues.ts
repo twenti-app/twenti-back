@@ -9,6 +9,8 @@ import {GenerateQrOutputDto} from "../../authentication/adapter/out/dto/Generate
 import {CheckTokenInputDto} from "../../authentication/adapter/in/dto/CheckTokenInputDto";
 import {RefreshTokenOutputDto} from "../../authentication/adapter/out/dto/RefreshTokenOutputDto";
 import {UserOutputDto} from "../../user/adapter/out/dto/UserOutputDto";
+import {InviteUserInputDto} from "../../invitation/adapter/in/dto/InviteUserInputDto";
+import {InviteUserOutputDto} from "../../invitation/adapter/out/dto/InviteUserOutputDto";
 
 export const signUpInputDto: SignUpInputDto = {
     email: '',
@@ -60,7 +62,7 @@ export const logInOutputDto: LogInOutputDto = {
     email: '',
     emailVerified: false,
     createdAt: new Date(),
-    providerData: providerData,
+    providerData,
     isAnonymous: false,
     lastLoginAt: new Date(),
     stsTokenManager: defaultStsTokenManager
@@ -93,4 +95,19 @@ export const userOutoutDto: UserOutputDto = {
     consumedInvitations: 0,
     availableInvitations: 0,
     isActive2fa: false
+}
+
+export const inviteUserInputDto: InviteUserInputDto = {
+    guestEmail:'',
+    email: '',
+    reason: ''
+}
+
+export const inviteUserOutputDto :InviteUserOutputDto = {
+    email: '',
+    reason: '',
+    createdAt: new Date(),
+    guestEmail: '',
+    updatedAt: new Date(),
+    availableUntil: new Date()
 }

@@ -1,7 +1,7 @@
 import {toDefinition} from "../../shared/stringUtils/ToDefinition";
 import {
     checkTokenInputDto, faValue,
-    generateQrOutputDto,
+    generateQrOutputDto, inviteUserInputDto, inviteUserOutputDto,
     logInInputDto,
     logInOutputDto, refreshTokenOutputDTO,
     signUpInputDto,
@@ -29,6 +29,10 @@ export const swaggerConfig = {
         {
             "name": "User",
             "description": "User endpoints"
+        },
+        {
+            "name": "Invitation",
+            "description": "Invitation endpoints"
         }
     ],
     "schemes": [
@@ -301,7 +305,43 @@ export const swaggerConfig = {
                     }
                 }
             }
-        }
+        },
+        "/invitation/invite-user": {
+            "post": {
+                "tags": [
+                    "Invitation"
+                ],
+                "summary": "Invite user",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Invite user body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#definitions/inviteUserInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/inviteUserOutputDTO"
+                        }
+                    }
+                }
+            }
+        },
     },
     "definitions": {
         "signupInputDTO": {
@@ -339,6 +379,14 @@ export const swaggerConfig = {
         "userOutputDTO": {
             "type": "object",
             "properties": toDefinition(userOutoutDto)
+        },
+        "inviteUserInputDTO": {
+            "type": "object",
+            "properties": toDefinition(inviteUserInputDto)
+        },
+        "inviteUserOutputDTO": {
+            "type": "object",
+            "properties": toDefinition(inviteUserOutputDto)
         }
     },
     "components": {

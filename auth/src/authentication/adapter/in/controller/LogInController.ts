@@ -79,6 +79,5 @@ export class LogInController extends DefaultController {
     private checkInputDto(inputDto: LogInInputDto): boolean {
         if (!inputDto.email) return true;
         return !inputDto.password;
-
     }
 }

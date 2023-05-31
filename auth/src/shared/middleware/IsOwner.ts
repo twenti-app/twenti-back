@@ -40,7 +40,6 @@ export function isOwner(req, res, next) {
 
 export function isOwnerEmail(req, res, next) {
     const bearer = req.headers.authorization;
-
     if (!bearer) {
         const resp = ErrResponseService({
             status: 'Failure Request',
