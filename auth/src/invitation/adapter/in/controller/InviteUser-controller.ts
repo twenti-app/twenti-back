@@ -46,6 +46,7 @@ export class InviteUserController extends DefaultController {
                 return res.status(this.err.statusCode).send(ErrResponseService(this.err));
             }
             const response = await this.saveInvitation(inviteUserInputDto);
+            if(this.err.statusCode === CODE_OK) this.updateUserService.updateInvitation(inviteUserInputDto.email).then();
             return res.status(this.err.statusCode).send(response);
         });
     }

@@ -13,4 +13,18 @@ export class UpdateUserService implements UpdateUserPort {
             return {err: {statusCode: CODE_INTERNAL_SERVER_ERROR, message: error}};
         });
     }
+
+    updateInvitation(email: string) {
+        return UserModel.findOneAndUpdate({email}, {
+            $inc: {
+                consumedInvitations: 1,
+                availableInvitations: -1
+            }
+        }).then(r => {
+            if (!r) return {err: {statusCode: CODE_NOT_FOUND, message: 'User not found with email ' + email}}
+            return r;
+        }).catch((error) => {
+            return {err: {statusCode: CODE_INTERNAL_SERVER_ERROR, message: error}};
+        });
+    }
 }
