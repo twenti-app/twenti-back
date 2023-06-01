@@ -342,6 +342,39 @@ export const swaggerConfig = {
                 }
             }
         },
+        "/invitation/find-by-token/{token}": {
+            "get": {
+                "tags": [
+                    "Invitation"
+                ],
+                "summary": "Find invitation",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "Token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/inviteUserOutputDTO"
+                        }
+                    }
+                }
+            }
+        },
     },
     "definitions": {
         "signupInputDTO": {

@@ -1,4 +1,4 @@
-import {CODE_FORBIDDEN, CODE_INTERNAL_SERVER_ERROR, CODE_UNAUTHORIZED} from "../enums/Errors";
+import {CODE_FORBIDDEN, CODE_INTERNAL_SERVER_ERROR} from "../enums/Errors";
 import {ErrResponseService} from "../errors/ErrorService";
 import {getAuth} from "firebase-admin/auth";
 
@@ -17,17 +17,16 @@ export function authenticate(req, res, next) {
     getAuth()
         .verifyIdToken(token, true)
         .then((decodedToken) => {
-            if (decodedToken.email_verified) {
-                next();
-                return;
-            }
-            const resp = ErrResponseService({
+            next();
+            return;
+            /*const resp = ErrResponseService({
                 status: 'Failure Request',
                 statusCode: CODE_UNAUTHORIZED,
                 message: 'Unauthorized request'
             });
             return res.status(CODE_UNAUTHORIZED).send(resp);
             //add block users logic
+            */
         })
         .catch((error) => {
             const resp = ErrResponseService({
