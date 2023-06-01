@@ -76,11 +76,11 @@ export class InviteUserController extends DefaultController {
         const invitation: Invitation = {
             reason: inputDto.reason,
             email: inputDto.email,
-            guestEmail: inputDto.guestEmail
+            guestEmail: inputDto.guestEmail,
+            beenUsed: false
         }
 
         const data: any = await this.createInvitationService.createInvitation(invitation);
-        console.log(data);
         if (data.err) this.setErrData(data.err);
         return this.err.statusCode === CODE_OK ? this.getOutputDto(data): ErrResponseService(this.err);
     }
@@ -92,7 +92,8 @@ export class InviteUserController extends DefaultController {
             reason: data.reason,
             availableUntil: data. availableUntil,
             createdAt: data.createdAt,
-            updatedAt:data.updatedAt
+            updatedAt:data.updatedAt,
+            beenUsed: data.beenUsed
         }
     }
 }
