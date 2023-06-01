@@ -16,13 +16,15 @@ import {CreateInvitationService} from "../../../applicacion/service/CreateInvita
 import {Invitation} from "../../../domain/Invitation";
 import {InviteUserOutputDto} from "../../out/dto/InviteUserOutputDto";
 import * as crypto from "crypto";
+
 export class InviteUserController extends DefaultController {
 
     private updateUserService: UpdateUserService;
     private findUserService: FindUserService;
     private createInvitationService: CreateInvitationService;
 
-    private guestEmailError:boolean = false;
+    private guestEmailError: boolean = false;
+
     constructor() {
         super();
         this.updateUserService = new UpdateUserService();
@@ -37,17 +39,17 @@ export class InviteUserController extends DefaultController {
             if (this.checkErrors(inviteUserInputDto)) {
                 const resp = ErrResponseService({
                     status: 'Failure Request',
-                    statusCode:this.guestEmailError ? CODE_UNPROCESSABLE_ENTITY : CODE_BAD_REQUEST,
+                    statusCode: this.guestEmailError ? CODE_UNPROCESSABLE_ENTITY : CODE_BAD_REQUEST,
                     message: this.guestEmailError ? 'Invalid guest email' : 'Email and addressee are required'
                 });
                 return res.status(this.guestEmailError ? CODE_UNPROCESSABLE_ENTITY : CODE_BAD_REQUEST).send(resp);
             }
             const usersValid = await this.checkUsers(inviteUserInputDto.email, inviteUserInputDto.guestEmail);
-            if(usersValid) {
+            if (usersValid) {
                 return res.status(this.err.statusCode).send(ErrResponseService(this.err));
             }
             const response = await this.saveInvitation(inviteUserInputDto);
-            if(this.err.statusCode === CODE_OK) this.updateUserService.updateInvitation(inviteUserInputDto.email).then();
+            if (this.err.statusCode === CODE_OK) this.updateUserService.updateInvitation(inviteUserInputDto.email).then();
             return res.status(this.err.statusCode).send(response);
         });
     }
@@ -63,12 +65,15 @@ export class InviteUserController extends DefaultController {
         const ownerUser: any = await this.findUserService.findUserByEmail(userEmail);
         const guestUser: any = await this.findUserService.findUserByEmail(guestEmail);
         if (ownerUser.err || !guestUser.err) {
-            const error = ownerUser.err ?? {statusCode: CODE_CONFLICT, message: 'The guest email is already registered' };
+            const error = ownerUser.err ?? {
+                statusCode: CODE_CONFLICT,
+                message: 'The guest email is already registered'
+            };
             this.setErrData(error);
             return true;
         }
-        if(ownerUser.availableInvitations <= 0) {
-            this.setErrData({statusCode: CODE_FORBIDDEN, message: 'You do not have any available invitations to send' });
+        if (ownerUser.availableInvitations <= 0) {
+            this.setErrData({statusCode: CODE_FORBIDDEN, message: 'You do not have any available invitations to send'});
             return true;
         }
         return false;
@@ -85,7 +90,7 @@ export class InviteUserController extends DefaultController {
 
         const data: any = await this.createInvitationService.createInvitation(invitation);
         if (data.err) this.setErrData(data.err);
-        return this.err.statusCode === CODE_OK ? this.getOutputDto(data): ErrResponseService(this.err);
+        return this.err.statusCode === CODE_OK ? this.getOutputDto(data) : ErrResponseService(this.err);
     }
 
     private generateToken(email: string, guestEmail: string) {
@@ -96,14 +101,14 @@ export class InviteUserController extends DefaultController {
         return hash.digest('hex');
     }
 
-    private getOutputDto(data:any) : InviteUserOutputDto{
+    private getOutputDto(data: any): InviteUserOutputDto {
         return {
             email: data.email,
             guestEmail: data.guestEmail,
             reason: data.reason,
-            availableUntil: data. availableUntil,
+            availableUntil: data.availableUntil,
             createdAt: data.createdAt,
-            updatedAt:data.updatedAt,
+            updatedAt: data.updatedAt,
             beenUsed: data.beenUsed,
             token: data.token
         }

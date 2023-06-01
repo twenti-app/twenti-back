@@ -18,12 +18,12 @@ export class RefreshTokenController extends DefaultController {
             const refreshToken = req.params.refreshToken;
 
             if (!refreshToken) {
-                const resp = ErrResponseService({
+                const inputError = ErrResponseService({
                     status: 'Failure Request',
                     statusCode: CODE_BAD_REQUEST,
                     message: 'Refresh token is required'
                 });
-                return res.status(this.err.statusCode).send(resp);
+                return res.status(this.err.statusCode).send(inputError);
             }
             const data = await this.refreshTokenController.refreshToken(refreshToken) as any;
             if (data.err) this.setErrData(data.err);

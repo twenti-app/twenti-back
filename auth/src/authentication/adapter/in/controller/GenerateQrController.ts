@@ -23,42 +23,51 @@ export class GenerateQrController extends DefaultController {
     public generateQr() {
         return this.router.get("/:email", isOwnerEmail, async (req, res) => {
             this.defaultErrData();
-            const savedData: any = await this.findByUserUidGenerateQr.findByEmail(req.params.email);
-            if (savedData && savedData?.err?.statusCode !== CODE_NOT_FOUND) {
-                if (savedData.err) this.setErrData(savedData.err);
-                const savedResp = this.err.statusCode === CODE_OK ? this.getSavedDataDto(savedData) : ErrResponseService(this.err);
-                return res.status(this.err.statusCode).send(savedResp);
-            }
-            const secret = speakeasy.generateSecret({
-                length: 20,
-                name: `Twenti (${req.params.email})`,
-                issuer: 'Twenti',
-            });
+            const qr = await this.checkSavedData(req.params.email);
+            if (qr) return res.status(this.err.statusCode).send(qr);
+            const secret = this.getSecret(req.params.email);
             QRCode.toDataURL(secret.otpauth_url, (err, dataUrl) => {
                 if (err || !dataUrl) {
                     const error = {err: {statusCode: CODE_BAD_REQUEST, message: err}};
                     this.setErrData(error);
                 }
                 const resp = this.err.statusCode === CODE_OK ? this.getOutputDto(dataUrl) : ErrResponseService(this.err);
-                const savedData: GenerateQrSimpleModel = {
+                const savedDataQr: GenerateQrSimpleModel = {
                     ...this.getOutputDto(dataUrl),
                     email: req.params.email,
                     secret: secret.base32,
                 }
-                this.saveGenerateQrService.saveGenerateQr(savedData);
+                this.saveGenerateQrService.saveGenerateQr(savedDataQr);
                 return res.status(this.err.statusCode).send(resp);
             });
         });
     }
 
+    private async checkSavedData(email: string) {
+        const qr: any = await this.findByUserUidGenerateQr.findByEmail(email);
+        if (qr && qr?.err?.statusCode !== CODE_NOT_FOUND) {
+            if (qr.err) this.setErrData(qr.err);
+            return this.err.statusCode === CODE_OK ? this.getSavedDataDto(qr) : ErrResponseService(this.err);
+        }
+        return false;
+    }
+
+    private getSecret(email: string){
+        return speakeasy.generateSecret({
+            length: 20,
+            name: `Twenti (${email})`,
+            issuer: 'Twenti',
+        });
+    }
     private getOutputDto(data): GenerateQrOutputDto {
         const values = data.split(",");
         const info = values[0].split(';');
-        return {
+        const value = {
             extension: info[0].split("/")[1],
             base: info[1],
             data: values[1]
         }
+        return this.getSavedDataDto(value);
     }
 
     private getSavedDataDto(value): GenerateQrOutputDto {

@@ -26,12 +26,12 @@ export class LogInController extends DefaultController {
             this.defaultErrData();
             const logInInputDto: LogInInputDto = req.body;
             if (this.checkInputDto(logInInputDto)) {
-                const resp = ErrResponseService({
+                const inputError = ErrResponseService({
                     status: 'Failure Request',
                     statusCode: CODE_BAD_REQUEST,
                     message: 'Email and Password are required'
                 });
-                return res.status(CODE_BAD_REQUEST).send(resp);
+                return res.status(CODE_BAD_REQUEST).send(inputError);
             }
             const user: LogInModel = {
                 email: logInInputDto.email,
