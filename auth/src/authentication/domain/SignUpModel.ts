@@ -3,5 +3,5 @@ export interface SignUpModel {
     password: string;
     emailVerified: boolean;
     phoneNumber: string;
-    disbled: boolean;
+    disabled: boolean;
 }

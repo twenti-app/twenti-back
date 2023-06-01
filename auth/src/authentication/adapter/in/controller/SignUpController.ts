@@ -2,30 +2,58 @@ import {DefaultController} from "../../../../shared/objectUtils/DefaultControlle
 import {SignUpInputDto} from "../dto/SignUpInputDto";
 import {SignUpService} from "../../../application/service/SignUpService";
 import {SignUpModel} from "../../../domain/SignUpModel";
-import {CODE_OK} from "../../../../shared/enums/Errors";
+import {CODE_BAD_REQUEST, CODE_OK} from "../../../../shared/enums/Errors";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
 import {SignUpOutputDto} from "../../out/dto/SignUpOutputDto";
 import {CreateUserService} from "../../../../user/application/service/CreateUser-service";
+import {FindInvitationService} from "../../../../invitation/applicacion/service/FindInvitation-service";
+import {UpdateInvitationService} from "../../../../invitation/applicacion/service/UpdateInvitation-service";
+import {Invitation} from "../../../../invitation/domain/Invitation";
 
 
 export class SignUpController extends DefaultController {
     private signUpService: SignUpService;
     private createUserService: CreateUserService;
+    private findInvitationService: FindInvitationService;
+    private updateInvitationService: UpdateInvitationService;
 
     constructor() {
         super();
         this.signUpService = new SignUpService();
         this.createUserService = new CreateUserService();
+        this.findInvitationService = new FindInvitationService();
+        this.updateInvitationService = new UpdateInvitationService();
     }
 
     public signup(): any {
         return this.router.post("/", async (req, res) => {
             this.defaultErrData();
-            const signupInputDto: SignUpInputDto = req.body
-            // TODO: Check if is valid
+            const signupInputDto: SignUpInputDto = {
+                email: req.body.email,
+                password: req.body.password,
+                phoneNumber: req.body.phoneNumber,
+                invitation: req.body.invitation
+            }
+            if (!this.checkInputDto(signupInputDto)) {
+                const inputError = ErrResponseService({
+                    status: 'Failure Request',
+                    statusCode: CODE_BAD_REQUEST,
+                    message: 'Email, password and invitation are required'
+                });
+                return res.status(CODE_BAD_REQUEST).send(inputError);
+            }
+            const invitationValid = await this.checkInvitation(signupInputDto.invitation, signupInputDto.email);
+            if (!invitationValid) {
+                const invitationError = ErrResponseService({
+                    status: 'Failure Request',
+                    statusCode: CODE_BAD_REQUEST,
+                    message: 'Invitation is invalid'
+                });
+                return res.status(CODE_BAD_REQUEST).send(invitationError);
+            }
             const signUpModel: SignUpModel = {
                 emailVerified: false,
-                disbled: false,
+                disabled: false,
                 email: signupInputDto.email,
                 password: signupInputDto.password,
                 phoneNumber: signupInputDto.phoneNumber
@@ -38,8 +66,26 @@ export class SignUpController extends DefaultController {
                 uid: data.uid,
                 email: data.email
             })
+            if(this.err.statusCode === CODE_OK ) {
+                const invitation: Invitation = {beenUsed: true};
+                this.updateInvitationService.partialUpdateInvitation(invitation,signupInputDto.invitation).then();
+            }
             return res.status(this.err.statusCode).send(resp);
         })
+    }
+
+    private checkInputDto(data: SignUpInputDto): boolean {
+        if (!data.email) return false;
+        if (!data.password) return false;
+        return !!data.invitation;
+    }
+
+    private async checkInvitation(token: string, email: string) {
+        const invitation: any = await this.findInvitationService.findInvitationByToken(token);
+        if (invitation.err) return false;
+        if (invitation.beenUsed) return false;
+        if (invitation.guestEmail !== email) return false;
+        return new Date() < invitation.availableUntil;
     }
 
     private getOutputDto(data): SignUpOutputDto {
