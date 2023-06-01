@@ -1,24 +1,24 @@
 import {DefaultController} from "../../../../shared/objectUtils/DefaultController";
+import {FindInvitationService} from "../../../applicacion/service/FindInvitation-service";
+import {authenticate} from "../../../../shared/middleware/IsAuthenticate";
 import {CODE_OK} from "../../../../shared/enums/Errors";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
-import {authenticate} from "../../../../shared/middleware/IsAuthenticate";
 import {InviteUserOutputDto} from "../../out/dto/InviteUserOutputDto";
-import {FindInvitationService} from "../../../applicacion/service/FindInvitation-service";
 
-export class FindInvitationByTokenController extends DefaultController {
+export class FindInvitationsByEmailController extends DefaultController {
     private findInvitationService: FindInvitationService;
     constructor() {
         super();
         this.findInvitationService = new FindInvitationService();
     }
 
-    public findInvitationByToken(){
-        return this.router.get('/:token', authenticate, async (req, res) => {
+    public findInvitationByEmail(){
+        return this.router.get('/:email', authenticate, async (req, res) => {
             this.defaultErrData();
-            const data: any = await this.findInvitationService.findInvitationByToken(req.params.token);
+            const data: any = await this.findInvitationService.findInvitationByEmail(req.params.email);
 
             if (data.err) this.setErrData(data.err);
-            const resp = this.err.statusCode === CODE_OK ? this.getOutputDto(data) : ErrResponseService(this.err);
+            const resp = this.err.statusCode === CODE_OK ? data.map(element => this.getOutputDto(element)) : ErrResponseService(this.err);
             return res.status(this.err.statusCode).send(resp);
         });
     }

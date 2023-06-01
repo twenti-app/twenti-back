@@ -1,7 +1,7 @@
 import {toDefinition} from "../../shared/stringUtils/ToDefinition";
 import {
     checkTokenInputDto, faValue,
-    generateQrOutputDto, inviteUserInputDto, inviteUserOutputDto,
+    generateQrOutputDto, inviteUserArrayOutputDto, inviteUserInputDto, inviteUserOutputDto,
     logInInputDto,
     logInOutputDto, refreshTokenOutputDTO,
     signUpInputDto,
@@ -347,7 +347,7 @@ export const swaggerConfig = {
                 "tags": [
                     "Invitation"
                 ],
-                "summary": "Find invitation",
+                "summary": "Find invitation by Token",
                 "produces": [
                     "application/json"
                 ],
@@ -375,6 +375,39 @@ export const swaggerConfig = {
                 }
             }
         },
+        "/invitation/find-by-email/{email}": {
+            "get": {
+                "tags": [
+                    "Invitation"
+                ],
+                "summary": "Find invitation by email",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "Email",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#definitions/inviteUserArrayOutputDTO"
+                        }
+                    }
+                }
+            }
+        }
     },
     "definitions": {
         "signupInputDTO": {
@@ -420,6 +453,10 @@ export const swaggerConfig = {
         "inviteUserOutputDTO": {
             "type": "object",
             "properties": toDefinition(inviteUserOutputDto)
+        },
+        "inviteUserArrayOutputDTO": {
+            "type": "object",
+            "properties": toDefinition(inviteUserArrayOutputDto)
         }
     },
     "components": {

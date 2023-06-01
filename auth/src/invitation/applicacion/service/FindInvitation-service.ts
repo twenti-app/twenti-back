@@ -12,4 +12,13 @@ export class FindInvitationService implements FindInvitationPort {
         });
     }
 
+    findInvitationByEmail(email: string) {
+        return InvitationModel.find({email}).then(r => {
+            if (!r) return {err: {statusCode: CODE_NOT_FOUND, message: 'Invitations not found with email ' + email}}
+            return r;
+        }).catch((error) => {
+            return {err: {statusCode: CODE_INTERNAL_SERVER_ERROR, message: error}};
+        });
+    }
+
 }

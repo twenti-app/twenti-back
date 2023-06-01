@@ -113,3 +113,16 @@ export const inviteUserOutputDto :InviteUserOutputDto = {
     beenUsed: false,
     token: ''
 }
+
+export const inviteUserArrayOutputDto :InviteUserOutputDto[] =[
+    {
+    email: '',
+    reason: '',
+    createdAt: new Date(),
+    guestEmail: '',
+    updatedAt: new Date(),
+    availableUntil: new Date(),
+    beenUsed: false,
+    token: ''
+    }
+    ]
