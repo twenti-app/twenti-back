@@ -6,6 +6,7 @@ export interface Invitation {
     email: string;
     reason?: string;
     beenUsed:boolean;
+    token:string;
     availableUntil?: Date;
     createdAt?: Date;
     updatedAt?: Date;

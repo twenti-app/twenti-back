@@ -6,7 +6,8 @@ import {InviteUserInputDto} from "../dto/InviteUserInputDto";
 import {ErrResponseService} from "../../../../shared/errors/ErrorService";
 import {
     CODE_BAD_REQUEST,
-    CODE_CONFLICT, CODE_FORBIDDEN,
+    CODE_CONFLICT,
+    CODE_FORBIDDEN,
     CODE_OK,
     CODE_UNPROCESSABLE_ENTITY
 } from "../../../../shared/enums/Errors";
@@ -14,7 +15,7 @@ import {emailVerified} from "../../../../shared/stringUtils/EmailVerified";
 import {CreateInvitationService} from "../../../applicacion/service/CreateInvitation-service";
 import {Invitation} from "../../../domain/Invitation";
 import {InviteUserOutputDto} from "../../out/dto/InviteUserOutputDto";
-
+import * as crypto from "crypto";
 export class InviteUserController extends DefaultController {
 
     private updateUserService: UpdateUserService;
@@ -78,12 +79,21 @@ export class InviteUserController extends DefaultController {
             reason: inputDto.reason,
             email: inputDto.email,
             guestEmail: inputDto.guestEmail,
+            token: this.generateToken(inputDto.email, inputDto.guestEmail),
             beenUsed: false
         }
 
         const data: any = await this.createInvitationService.createInvitation(invitation);
         if (data.err) this.setErrData(data.err);
         return this.err.statusCode === CODE_OK ? this.getOutputDto(data): ErrResponseService(this.err);
+    }
+
+    private generateToken(email: string, guestEmail: string) {
+        const textToHas = `${email} ${guestEmail} ${new Date()}`;
+        const hash = crypto.createHash('sha256');
+        hash.update(textToHas);
+
+        return hash.digest('hex');
     }
 
     private getOutputDto(data:any) : InviteUserOutputDto{
@@ -94,7 +104,8 @@ export class InviteUserController extends DefaultController {
             availableUntil: data. availableUntil,
             createdAt: data.createdAt,
             updatedAt:data.updatedAt,
-            beenUsed: data.beenUsed
+            beenUsed: data.beenUsed,
+            token: data.token
         }
     }
 }

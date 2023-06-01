@@ -110,5 +110,6 @@ export const inviteUserOutputDto :InviteUserOutputDto = {
     guestEmail: '',
     updatedAt: new Date(),
     availableUntil: new Date(),
-    beenUsed: false
+    beenUsed: false,
+    token: ''
 }
