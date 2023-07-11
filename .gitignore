@@ -3,3 +3,5 @@ node_modules
 dist
 keys
 config/src/main/resources/application.properties
+/notifications/venv/*
+/notifications/venv/lib/
